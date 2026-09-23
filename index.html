@@ -2,22 +2,168 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Queen 👑</title>
+
     <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-    <div id="app">
-        <h1>👑 Queen</h1>
-        <p>Social game for girls</p>
-
-        <button onclick="showMessage()">
-            Enter Queen
-        </button>
-    </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<script src="app.js"></script>
+</head>
+
+<body>
+
+    <main id="app">
+
+        <!-- ONBOARDING -->
+        <section id="onboarding" class="screen active">
+
+            <div class="brand">
+                <div class="crown">♛</div>
+                <h1>QUEEN</h1>
+            </div>
+
+            <p class="intro">
+                Твой мир. Твоя игра.
+            </p>
+
+            <div class="profile-form">
+
+                <label class="field-label" for="nickname">
+                    Ник
+                </label>
+
+                <input
+                    id="nickname"
+                    class="nickname-input"
+                    type="text"
+                    maxlength="20"
+                    placeholder="Введите ник"
+                    autocomplete="off"
+                >
+
+                <label class="field-label">
+                    Аватар
+                </label>
+
+                <label class="avatar-picker" for="avatarInput">
+
+                    <div id="avatarPreview" class="avatar-preview">
+                        <span>+</span>
+                    </div>
+
+                    <div class="avatar-text">
+                        <strong>Добавьте аватарку</strong>
+                        <small>Нажмите, чтобы выбрать фото</small>
+                    </div>
+
+                </label>
+
+                <input
+                    id="avatarInput"
+                    type="file"
+                    accept="image/*"
+                    hidden
+                >
+
+                <p id="errorMessage" class="error-message"></p>
+
+                <button id="startButton" class="start-button" type="button">
+                    Начать
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- MAIN SCREEN -->
+        <section id="home" class="screen">
+
+            <header class="home-header">
+
+                <div class="logo">
+                    <span>♛</span>
+                    QUEEN
+                </div>
+
+                <div id="headerAvatar" class="header-avatar">
+                    👤
+                </div>
+
+            </header>
+
+
+            <div class="welcome">
+
+                <p class="small-text">Добро пожаловать</p>
+
+                <h2>
+                    Привет, <span id="userNickname">Queen</span>
+                </h2>
+
+                <div class="crown-balance">
+                    <span>👑</span>
+                    <strong>0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="main-card">
+
+                <div class="card-icon">♛</div>
+
+                <h3>Твой Queen начинается здесь</h3>
+
+                <p>
+                    Играй, общайся, прокачивайся и создавай свой мир.
+                </p>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+                <button class="action-card" type="button">
+                    <span>🎮</span>
+                    <strong>Играть</strong>
+                    <small>Мини-игры</small>
+                </button>
+
+                <button class="action-card" type="button">
+                    <span>👑</span>
+                    <strong>Профиль</strong>
+                    <small>Твой Queen</small>
+                </button>
+
+            </div>
+
+
+            <nav class="bottom-nav">
+
+                <button class="nav-item active" type="button">
+                    <span>⌂</span>
+                    <small>Главная</small>
+                </button>
+
+                <button class="nav-item" type="button">
+                    <span>♛</span>
+                    <small>Играть</small>
+                </button>
+
+                <button class="nav-item" type="button">
+                    <span>◎</span>
+                    <small>Профиль</small>
+                </button>
+
+            </nav>
+
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+
 </body>
 </html>
