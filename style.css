@@ -2,46 +2,538 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
 }
 
 body {
-    min-height: 100vh;
-    background: #f5f1ea;
-    color: #111;
-    font-family: Arial, sans-serif;
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+        "SF Pro Text", Arial, sans-serif;
 }
 
-#app {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 24px;
-    text-align: center;
-}
-
-h1 {
-    font-size: 48px;
-}
-
-p {
-    font-size: 18px;
-    opacity: 0.65;
+button,
+input {
+    font: inherit;
 }
 
 button {
     border: none;
-    border-radius: 16px;
-    padding: 15px 28px;
+}
+
+#app {
+    width: 100%;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   SCREENS
+========================= */
+
+.screen {
+    display: none;
+    min-height: 100vh;
+}
+
+.screen.active {
+    display: flex;
+}
+
+
+/* =========================
+   ONBOARDING
+========================= */
+
+#onboarding {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    background: #000;
+}
+
+.brand {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.crown {
+    font-size: 62px;
+    line-height: 1;
+    margin-bottom: 14px;
+    color: #fff;
+}
+
+.brand h1 {
+    font-size: 29px;
+    font-weight: 800;
+    letter-spacing: 7px;
+}
+
+.intro {
+    color: #888;
+    font-size: 15px;
+    margin-bottom: 42px;
+    text-align: center;
+}
+
+
+/* FORM */
+
+.profile-form {
+    width: 100%;
+    max-width: 360px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 9px;
+    color: #aaa;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.nickname-input {
+    width: 100%;
+    height: 56px;
+    padding: 0 17px;
+
+    border: 1px solid #292929;
+    border-radius: 15px;
+
+    outline: none;
+
     background: #111;
-    color: white;
+    color: #fff;
+
     font-size: 16px;
+
+    margin-bottom: 22px;
+
+    transition: border-color 0.2s;
+}
+
+.nickname-input::placeholder {
+    color: #555;
+}
+
+.nickname-input:focus {
+    border-color: #666;
+}
+
+
+/* AVATAR */
+
+.avatar-picker {
+    width: 100%;
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 10px;
+
+    background: #111;
+    border: 1px solid #292929;
+    border-radius: 15px;
+
+    cursor: pointer;
+
+    margin-bottom: 22px;
+}
+
+.avatar-picker:active {
+    transform: scale(0.985);
+}
+
+.avatar-preview {
+    width: 56px;
+    height: 56px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #1d1d1d;
+
+    overflow: hidden;
+
+    font-size: 26px;
+    color: #777;
+}
+
+.avatar-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-text {
+    display: flex;
+    flex-direction: column;
+
+    margin-left: 13px;
+    gap: 4px;
+}
+
+.avatar-text strong {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.avatar-text small {
+    color: #666;
+    font-size: 12px;
+}
+
+
+/* ERROR */
+
+.error-message {
+    min-height: 18px;
+
+    color: #ff7777;
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+
+/* START BUTTON */
+
+.start-button {
+    width: 100%;
+    height: 56px;
+
+    border-radius: 16px;
+
+    background: #fff;
+    color: #000;
+
+    font-size: 16px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s,
+        opacity 0.15s;
+}
+
+.start-button:active {
+    transform: scale(0.98);
+    opacity: 0.85;
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+#home {
+    flex-direction: column;
+    padding: 20px 18px 100px;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            #202020 0%,
+            #080808 38%,
+            #000 70%
+        );
+}
+
+
+/* HEADER */
+
+.home-header {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 45px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    font-size: 25px;
+}
+
+.header-avatar {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #171717;
+
+    overflow: hidden;
+
+    font-size: 18px;
+}
+
+.header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* WELCOME */
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.small-text {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.welcome h2 {
+    font-size: 29px;
+    font-weight: 750;
+    margin-bottom: 18px;
+}
+
+#userNickname {
+    color: #fff;
+}
+
+.crown-balance {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 8px 13px;
+
+    border-radius: 12px;
+
+    background: #151515;
+
+    font-size: 14px;
+}
+
+.crown-balance span {
+    font-size: 15px;
+}
+
+.crown-balance strong {
     font-weight: 700;
+}
+
+
+/* MAIN CARD */
+
+.main-card {
+    padding: 26px;
+
+    border: 1px solid #242424;
+    border-radius: 24px;
+
+    background: #0d0d0d;
+
+    margin-bottom: 14px;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: #181818;
+
+    font-size: 25px;
+
+    margin-bottom: 24px;
+}
+
+.main-card h3 {
+    font-size: 20px;
+    line-height: 1.2;
+
+    margin-bottom: 9px;
+}
+
+.main-card p {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* QUICK ACTIONS */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.action-card {
+    min-height: 125px;
+
+    padding: 17px;
+
+    text-align: left;
+
+    border: 1px solid #242424;
+    border-radius: 20px;
+
+    background: #0d0d0d;
+    color: #fff;
+
     cursor: pointer;
 }
 
-button:active {
-    transform: scale(0.97);
+.action-card:active {
+    transform: scale(0.98);
+}
+
+.action-card span {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 17px;
+}
+
+.action-card strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.action-card small {
+    color: #666;
+    font-size: 12px;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 50%;
+    bottom: 14px;
+
+    transform: translateX(-50%);
+
+    width: calc(100% - 28px);
+    max-width: 500px;
+
+    display: flex;
+    justify-content: space-around;
+
+    padding: 9px 8px;
+
+    background: rgba(18, 18, 18, 0.94);
+
+    border: 1px solid #292929;
+    border-radius: 20px;
+
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.nav-item {
+    min-width: 70px;
+    min-height: 48px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    background: transparent;
+    color: #555;
+
+    cursor: pointer;
+}
+
+.nav-item span {
+    font-size: 20px;
+}
+
+.nav-item small {
+    font-size: 10px;
+}
+
+.nav-item.active {
+    color: #fff;
+}
+
+
+/* =========================
+   SMALL SCREENS
+========================= */
+
+@media (max-height: 680px) {
+
+    #onboarding {
+        padding-top: 25px;
+        padding-bottom: 25px;
+    }
+
+    .crown {
+        font-size: 50px;
+    }
+
+    .intro {
+        margin-bottom: 25px;
+    }
+
+    .nickname-input {
+        height: 52px;
+        margin-bottom: 15px;
+    }
+
+    .avatar-picker {
+        min-height: 68px;
+        margin-bottom: 15px;
+    }
+
+    .avatar-preview {
+        width: 50px;
+        height: 50px;
+    }
+
+    .start-button {
+        height: 52px;
+    }
 }
