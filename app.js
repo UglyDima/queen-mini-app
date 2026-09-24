@@ -1,146 +1,169 @@
-const tg = window.Telegram.WebApp;
 
-tg.ready();
-tg.expand();
+const tg = window.Telegram?.WebApp;
 
+if (tg) {
+    tg.ready();
+    tg.expand();
+}
 
-/* =========================
-   ELEMENTS
-========================= */
+// Screens
+const screens = document.querySelectorAll('.screen');
+const navigationButtons = document.querySelectorAll('[data-screen]');
 
-const onboarding = document.getElementById("onboarding");
-const home = document.getElementById("home");
+function showScreen(screenId) {
+    screens.forEach((screen) => {
+        screen.classList.remove('active');
+    });
 
-const nicknameInput = document.getElementById("nickname");
-const avatarInput = document.getElementById("avatarInput");
+    const targetScreen = document.getElementById(screenId);
 
-const avatarPreview = document.getElementById("avatarPreview");
-const headerAvatar = document.getElementById("headerAvatar");
+    if (targetScreen) {
+        targetScreen.classList.add('active');
+    }
 
-const startButton = document.getElementById("startButton");
+    document.querySelectorAll('.nav-item').forEach((item) => {
+        item.classList.toggle(
+            'active',
+            item.dataset.screen === screenId
+        );
+    });
 
-const errorMessage = document.getElementById("errorMessage");
-const userNickname = document.getElementById("userNickname");
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
 
+navigationButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const screenId = button.dataset.screen;
 
-/* =========================
-   AVATAR
-========================= */
+        if (screenId) {
+            showScreen(screenId);
+        }
+    });
+});
 
-let avatarData = null;
+// User data
+let userNickname = '';
+let userAvatar = '';
 
-avatarInput.addEventListener("change", function () {
+// Elements
+const nicknameInput = document.getElementById('nickname');
+const avatarInput = document.getElementById('avatarInput');
+const avatarPreview = document.getElementById('avatarPreview');
+const startButton = document.getElementById('startButton');
+const errorMessage = document.getElementById('errorMessage');
 
-    const file = avatarInput.files[0];
+const homeNickname = document.getElementById('homeNickname');
+const profileNickname = document.getElementById('profileNickname');
+
+const profileButton = document.getElementById('profileButton');
+const profileAvatar = document.getElementById('profileAvatar');
+
+// Avatar upload
+avatarInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
 
     if (!file) {
         return;
     }
 
-    if (!file.type.startsWith("image/")) {
-        errorMessage.textContent = "Выберите изображение.";
-        avatarInput.value = "";
-        return;
-    }
-
-    const maxSize = 8 * 1024 * 1024;
-
-    if (file.size > maxSize) {
-        errorMessage.textContent = "Фото должно быть меньше 8 МБ.";
-        avatarInput.value = "";
+    if (!file.type.startsWith('image/')) {
+        errorMessage.textContent = 'Выбери изображение.';
         return;
     }
 
     const reader = new FileReader();
 
-    reader.onload = function (event) {
+    reader.onload = () => {
+        userAvatar = reader.result;
 
-        avatarData = event.target.result;
+        avatarPreview.innerHTML = '';
 
-        avatarPreview.innerHTML = "";
-
-        const image = document.createElement("img");
-        image.src = avatarData;
-        image.alt = "Аватар";
+        const image = document.createElement('img');
+        image.src = userAvatar;
+        image.alt = 'Аватар пользователя';
 
         avatarPreview.appendChild(image);
-
-        errorMessage.textContent = "";
     };
 
     reader.readAsDataURL(file);
 });
 
+// Start Queen
+startButton.addEventListener('click', () => {
+    userNickname = nicknameInput.value.trim();
 
-/* =========================
-   START
-========================= */
-
-startButton.addEventListener("click", function () {
-
-    const nickname = nicknameInput.value.trim();
-
-    if (!nickname) {
-        errorMessage.textContent = "Введите ник.";
+    if (userNickname.length < 2) {
+        errorMessage.textContent = 'Введи ник минимум из 2 символов.';
         nicknameInput.focus();
         return;
     }
 
-    if (nickname.length < 2) {
-        errorMessage.textContent = "Ник должен содержать минимум 2 символа.";
-        nicknameInput.focus();
+    if (userNickname.length > 20) {
+        errorMessage.textContent = 'Ник не должен быть длиннее 20 символов.';
         return;
     }
 
-    if (!avatarData) {
-        errorMessage.textContent = "Добавьте аватарку.";
-        return;
+    errorMessage.textContent = '';
+
+    homeNickname.textContent = userNickname;
+    profileNickname.textContent = userNickname;
+
+    if (userAvatar) {
+        profileAvatar.innerHTML = '';
+
+        const image = document.createElement('img');
+        image.src = userAvatar;
+        image.alt = 'Аватар пользователя';
+
+        profileAvatar.appendChild(image);
+
+        profileButton.textContent = '';
+
+        const smallImage = document.createElement('img');
+        smallImage.src = userAvatar;
+        smallImage.alt = 'Аватар пользователя';
+
+        profileButton.appendChild(smallImage);
     }
 
-    errorMessage.textContent = "";
-
-    userNickname.textContent = nickname;
-
-    headerAvatar.innerHTML = "";
-
-    const image = document.createElement("img");
-    image.src = avatarData;
-    image.alt = "Аватар";
-
-    headerAvatar.appendChild(image);
-
-    onboarding.classList.remove("active");
-    home.classList.add("active");
-
-    window.scrollTo(0, 0);
-
-    /*
-        Здесь позже подключим сохранение профиля
-        и отправку данных в backend.
-    */
-
+    showScreen('home');
 });
 
-
-/* =========================
-   ENTER = START
-========================= */
-
-nicknameInput.addEventListener("keydown", function (event) {
-
-    if (event.key === "Enter") {
-        startButton.click();
-    }
-
+// Open profile
+profileButton.addEventListener('click', () => {
+    showScreen('profile');
 });
 
+// Fortune, Upgrader and Duel
+const modeButtons = document.querySelectorAll('[data-mode]');
 
-/* =========================
-   TELEGRAM BACK BUTTON
-========================= */
+modeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const mode = button.dataset.mode;
 
-if (tg.BackButton) {
+        if (mode === 'fortune') {
+            alert('✨ Fortune скоро будет доступен!');
+        }
 
-    tg.BackButton.hide();
+        if (mode === 'upgrader') {
+            alert('⬆️ Upgrader скоро будет доступен!');
+        }
 
-}
+        if (mode === 'duel') {
+            alert('⚔️ Duel скоро будет доступен!');
+        }
+    });
+});
+
+// Status card
+const statusCard = document.getElementById('statusCard');
+
+statusCard.addEventListener('click', () => {
+    alert(
+        '👑 Crowns — твой статус в Queen. ' +
+        'Их нельзя напрямую купить.'
+    );
+});
