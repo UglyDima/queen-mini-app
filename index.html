@@ -2,307 +2,301 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#080509">
-    <title>QUEEN ✨</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#080509">
+  <title>QUEEN ✨</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <main id="app">
 
-        <section id="onboarding" class="screen active">
-            <div class="onboarding-glow glow-one"></div>
-            <div class="onboarding-glow glow-two"></div>
+<main id="app">
 
-            <div class="onboarding-brand">
-                <div class="brand-crown">👑</div>
-                <div class="brand-name">QUEEN<span>✨</span></div>
-                <p>Стань той, кого замечают.</p>
+  <section id="onboarding" class="screen active">
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+
+    <div class="welcome">
+      <div class="crown">♛</div>
+      <h1>QUEEN<span>✦</span></h1>
+      <p>Стань той, кого замечают.</p>
+    </div>
+
+    <div class="onboarding-card">
+      <h2>Создай свой образ</h2>
+      <p class="muted">Выбери имя и аватар для своего профиля.</p>
+
+      <div class="avatar-picker" id="avatarPicker">
+        <span id="avatarPreview">♛</span>
+        <div class="avatar-edit">＋</div>
+      </div>
+
+      <input
+        type="text"
+        id="nicknameInput"
+        maxlength="20"
+        placeholder="Твой никнейм"
+        autocomplete="off"
+      >
+
+      <button id="startButton" class="primary-button">
+        Войти в Queen ✨
+      </button>
+    </div>
+  </section>
+
+  <section id="appShell" class="screen">
+
+    <header class="topbar">
+      <div class="brand">QUEEN<span>✦</span></div>
+
+      <div class="top-profile">
+        <div class="small-avatar" id="topAvatar">♛</div>
+        <div>
+          <strong id="topNickname">Queen</strong>
+          <small>Level <span id="topLevel">1</span></small>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <section id="homeView" class="view active">
+
+        <div class="status-card">
+          <div class="status-main">
+            <div class="large-avatar" id="mainAvatar">♛</div>
+            <div class="status-info">
+              <span class="eyebrow">YOUR STATUS</span>
+              <h2 id="mainNickname">Queen</h2>
+              <p>Level <b id="mainLevel">1</b></p>
             </div>
+          </div>
 
-            <div class="profile-form">
-                <label for="nickname">Твой ник</label>
-                <input id="nickname" maxlength="20" placeholder="Введите ник" autocomplete="off">
+          <div class="crown-stat">
+            <span>♛</span>
+            <strong id="crownCount">0</strong>
+            <small>CROWNS</small>
+          </div>
+        </div>
 
-                <label>Твоя аватарка</label>
-                <label class="avatar-picker" for="avatarInput">
-                    <div id="avatarPreview" class="avatar-preview">＋</div>
-                    <div>
-                        <strong>Добавить фото</strong>
-                        <small>Твой образ в Queen</small>
-                    </div>
-                </label>
-
-                <input id="avatarInput" type="file" accept="image/*" hidden>
-
-                <p id="errorMessage" class="error-message"></p>
-
-                <button id="startButton" class="primary-button">
-                    Начать ✨
-                </button>
+        <div class="currency-row">
+          <div class="currency-card">
+            <span>🪙</span>
+            <div>
+              <strong id="coinCount">1500</strong>
+              <small>Coins</small>
             </div>
-        </section>
+          </div>
 
-        <section id="home" class="screen app-screen">
-            <header class="topbar">
-                <div class="wordmark">♛ QUEEN<span>✨</span></div>
-                <button id="profileButton" class="avatar-button" aria-label="Открыть профиль">
-                    👤
-                </button>
-            </header>
-
-            <div class="home-intro">
-                <p class="eyebrow">WELCOME TO YOUR ERA</p>
-
-                <h1>
-                    Привет, <span id="homeNickname">Queen</span> <span>✨</span>
-                </h1>
-
-                <p class="muted">
-                    Твой статус. Твои связи. Твои правила.
-                </p>
+          <div class="currency-card">
+            <span>💎</span>
+            <div>
+              <strong id="gemCount">30</strong>
+              <small>Gems</small>
             </div>
+          </div>
+        </div>
 
-            <button id="statusCard" class="status-card">
-                <div class="status-card-top">
-                    <span class="eyebrow">YOUR STATUS</span>
-                    <span class="status-pill">QUEEN</span>
-                </div>
+        <div class="section-heading">
+          <h2>Queen Feed</h2>
+          <span>✦</span>
+        </div>
 
-                <div class="crown-value">
-                    <span>👑</span>
-                    <strong id="crownsValue">1 240</strong>
-                </div>
+        <div class="feed-card">
+          <div class="feed-icon">✦</div>
+          <h3>Твой момент начинается здесь</h3>
+          <p>Делись стилем, участвуй в активностях и собирай Crowns.</p>
+          <button class="secondary-button" data-view="games">
+            Открыть игры
+          </button>
+        </div>
 
-                <div class="status-bottom">
-                    <span>Твой уровень статуса</span>
-                    <span id="levelValue">LVL 04</span>
-                </div>
+        <div class="section-heading">
+          <h2>Coming soon</h2>
+          <span>♡</span>
+        </div>
 
-                <div class="progress-track">
-                    <div class="progress-fill"></div>
-                </div>
-            </button>
+        <div class="coming-card">
+          <span>🎥</span>
+          <div>
+            <h3>Creator Feed</h3>
+            <p>Видео, образы, музыка и новые знакомства.</p>
+          </div>
+        </div>
 
-            <div class="currency-row">
-                <div class="currency-card">
-                    <span>🪙</span>
-                    <div>
-                        <small>Coins</small>
-                        <strong id="coinsValue">2 500</strong>
-                    </div>
-                </div>
+      </section>
 
-                <div class="currency-card">
-                    <span>💎</span>
-                    <div>
-                        <small>Gems</small>
-                        <strong id="gemsValue">120</strong>
-                    </div>
-                </div>
+      <section id="flipView" class="view">
+        <div class="page-heading">
+          <span>✦</span>
+          <h1>FLIP</h1>
+          <p>Испытай удачу без ставок.</p>
+        </div>
+
+        <div class="game-card">
+          <div class="game-symbol">🪙</div>
+          <h2>Coin Flip</h2>
+          <p>Выбери сторону и попробуй получить награду.</p>
+          <div class="flip-buttons">
+            <button class="choice-button" data-choice="heads">Орел</button>
+            <button class="choice-button" data-choice="tails">Решка</button>
+          </div>
+          <p id="flipResult" class="result"></p>
+        </div>
+      </section>
+
+      <section id="partyView" class="view">
+        <div class="page-heading">
+          <span>♛</span>
+          <h1>PARTY</h1>
+          <p>Объединяйся и играй вместе.</p>
+        </div>
+
+        <div class="empty-card">
+          <span>👑</span>
+          <h2>Parties</h2>
+          <p>Создание и поиск Party появятся скоро.</p>
+        </div>
+      </section>
+
+      <section id="gamesView" class="view">
+        <div class="page-heading">
+          <span>✦</span>
+          <h1>MINI GAMES</h1>
+          <p>Быстрые игры и награды.</p>
+        </div>
+
+        <div class="game-list">
+          <button class="mode-card" data-mode="Memory">
+            <span>🧠</span>
+            <div>
+              <h3>Memory</h3>
+              <p>Проверь свою память</p>
             </div>
+            <b>›</b>
+          </button>
 
-            <div class="section-heading">
-                <h2>Choose your mode <span>✨</span></h2>
+          <button class="mode-card" data-mode="Duel">
+            <span>⚡</span>
+            <div>
+              <h3>Duel</h3>
+              <p>Соревнуйся с другими</p>
             </div>
+            <b>›</b>
+          </button>
 
-            <div class="mode-grid">
-                <button class="mode-card pink" data-screen="games">
-                    <span class="mode-icon">🎮</span>
-                    <strong>Mini Games</strong>
-                    <small>Быстрые игры</small>
-                    <span class="mode-arrow">↗</span>
-                </button>
-
-                <button class="mode-card violet" data-screen="party">
-                    <span class="mode-icon">👥</span>
-                    <strong>Party</strong>
-                    <small>Создай своё комьюнити</small>
-                    <span class="mode-arrow">↗</span>
-                </button>
-
-                <button class="mode-card dark-pink" data-screen="flip">
-                    <span class="mode-icon">✨</span>
-                    <strong>FLIP</strong>
-                    <small>Fortune & challenges</small>
-                    <span class="mode-arrow">↗</span>
-                </button>
-
-                <button class="mode-card dark-violet" data-screen="cosmetics">
-                    <span class="mode-icon">🎨</span>
-                    <strong>Cosmetics</strong>
-                    <small>Собери свой стиль</small>
-                    <span class="mode-arrow">↗</span>
-                </button>
+          <button class="mode-card" data-mode="Fortune">
+            <span>🔮</span>
+            <div>
+              <h3>Fortune</h3>
+              <p>Получи случайную награду</p>
             </div>
+            <b>›</b>
+          </button>
+        </div>
+      </section>
 
-            <nav class="bottom-nav">
-                <button class="nav-item active" data-screen="home">
-                    <span>⌂</span>
-                    <small>Главная</small>
-                </button>
+      <section id="styleView" class="view">
+        <div class="page-heading">
+          <span>✧</span>
+          <h1>STYLE</h1>
+          <p>Собирай свой уникальный образ.</p>
+        </div>
 
-                <button class="nav-item" data-screen="games">
-                    <span>♛</span>
-                    <small>Games</small>
-                </button>
+        <div class="style-grid">
+          <div class="cosmetic-card">
+            <span>🖤</span>
+            <h3>Frames</h3>
+            <p>Рамки аватара</p>
+          </div>
 
-                <button class="nav-item" data-screen="party">
-                    <span>◎</span>
-                    <small>Party</small>
-                </button>
+          <div class="cosmetic-card">
+            <span>💗</span>
+            <h3>Themes</h3>
+            <p>Темы профиля</p>
+          </div>
 
-                <button class="nav-item" data-screen="cosmetics">
-                    <span>✦</span>
-                    <small>Style</small>
-                </button>
-            </nav>
-        </section>
+          <div class="cosmetic-card">
+            <span>✨</span>
+            <h3>Titles</h3>
+            <p>Особые титулы</p>
+          </div>
 
-        <section id="games" class="screen app-screen inner-screen">
-            <header class="inner-header">
-                <button class="back-button" data-screen="home">←</button>
-                <h2>Mini Games</h2>
-                <span>🎮</span>
-            </header>
+          <div class="cosmetic-card">
+            <span>👑</span>
+            <h3>Effects</h3>
+            <p>Эффекты Crown</p>
+          </div>
+        </div>
+      </section>
 
-            <p class="muted">
-                Быстрые игры, очки и новые достижения.
-            </p>
+      <section id="profileView" class="view">
+        <div class="page-heading">
+          <span>♡</span>
+          <h1>PROFILE</h1>
+          <p>Твоя личная страница.</p>
+        </div>
 
-            <div class="feature-panel">
-                <span>⚡</span>
-                <h3>Coming soon</h3>
-                <p>
-                    Здесь появятся короткие навыковые игры
-                    и дуэли без денежных ставок.
-                </p>
+        <div class="profile-card">
+          <div class="profile-avatar" id="profileAvatar">♛</div>
+          <h2 id="profileNickname">Queen</h2>
+          <p>Level <span id="profileLevel">1</span></p>
+
+          <div class="profile-stats">
+            <div>
+              <strong id="profileCrowns">0</strong>
+              <small>Crowns</small>
             </div>
-        </section>
-
-        <section id="party" class="screen app-screen inner-screen">
-            <header class="inner-header">
-                <button class="back-button" data-screen="home">←</button>
-                <h2>Party</h2>
-                <span>👥</span>
-            </header>
-
-            <p class="muted">
-                Создай своё комьюнити и найди своих людей.
-            </p>
-
-            <div class="feature-panel">
-                <span>💗</span>
-                <h3>Your people, your energy</h3>
-                <p>
-                    В будущем здесь будут Party, участники,
-                    роли, общие задания и соревнования.
-                </p>
+            <div>
+              <strong id="profileCoins">1500</strong>
+              <small>Coins</small>
             </div>
-        </section>
-
-        <section id="flip" class="screen app-screen inner-screen">
-            <header class="inner-header">
-                <button class="back-button" data-screen="home">←</button>
-                <h2>FLIP</h2>
-                <span>✨</span>
-            </header>
-
-            <p class="muted">
-                Игровые режимы с понятными правилами
-                и фиксированными наградами.
-            </p>
-
-            <div class="flip-list">
-                <button class="feature-panel" data-mode="fortune">
-                    <span>✨</span>
-                    <h3>Fortune</h3>
-                    <p>Ежедневная бесплатная награда.</p>
-                </button>
-
-                <button class="feature-panel" data-mode="upgrader">
-                    <span>⬆️</span>
-                    <h3>Upgrader</h3>
-                    <p>Улучшай предметы по открытым правилам.</p>
-                </button>
-
-                <button class="feature-panel" data-mode="duel">
-                    <span>⚔️</span>
-                    <h3>Duel</h3>
-                    <p>Соревнуйся в навыковых мини-играх.</p>
-                </button>
+            <div>
+              <strong id="profileGems">30</strong>
+              <small>Gems</small>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
 
-        <section id="cosmetics" class="screen app-screen inner-screen">
-            <header class="inner-header">
-                <button class="back-button" data-screen="home">←</button>
-                <h2>Cosmetics</h2>
-                <span>🎨</span>
-            </header>
+    </div>
 
-            <p class="muted">
-                Настрой свой профиль и собирай редкие предметы.
-            </p>
+    <nav class="bottom-nav">
 
-            <div class="rarity-row">
-                <span class="rarity common">Common</span>
-                <span class="rarity rare">Rare</span>
-                <span class="rarity epic">Epic</span>
-                <span class="rarity legendary">Legendary</span>
-            </div>
+      <button class="nav-button" data-view="flip">
+        <span>◈</span>
+        <small>FLIP</small>
+      </button>
 
-            <div class="cosmetic-grid">
-                <div class="cosmetic-card">
-                    <span>💗</span>
-                    <strong>Pink Aura</strong>
-                    <small>Rare</small>
-                </div>
+      <button class="nav-button" data-view="party">
+        <span>♛</span>
+        <small>PARTY</small>
+      </button>
 
-                <div class="cosmetic-card">
-                    <span>🪩</span>
-                    <strong>Gloss Frame</strong>
-                    <small>Epic</small>
-                </div>
+      <button class="nav-button games-button" data-view="games">
+        <span>✦</span>
+        <small>GAMES</small>
+      </button>
 
-                <div class="cosmetic-card">
-                    <span>✨</span>
-                    <strong>Star Title</strong>
-                    <small>Legendary</small>
-                </div>
+      <button class="nav-button" data-view="style">
+        <span>✧</span>
+        <small>STYLE</small>
+      </button>
 
-                <div class="cosmetic-card">
-                    <span>🖤</span>
-                    <strong>Dark Theme</strong>
-                    <small>Common</small>
-                </div>
-            </div>
-        </section>
+      <button class="nav-button" data-view="profile">
+        <span>♡</span>
+        <small>PROFILE</small>
+      </button>
 
-        <section id="profile" class="screen app-screen inner-screen">
-            <header class="inner-header">
-                <button class="back-button" data-screen="home">←</button>
-                <h2>Profile</h2>
-                <span>👤</span>
-            </header>
+    </nav>
 
-            <div class="profile-card">
-                <div id="profileAvatar" class="large-avatar">👤</div>
+  </section>
 
-                <h2 id="profileNickname">Queen</h2>
+</main>
 
-                <span class="status-pill">QUEEN ✨</span>
-
-                <p class="muted">
-                    Твой профиль и будущая коллекция косметики.
-                </p>
-            </div>
-        </section>
-
-    </main>
-
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
+
