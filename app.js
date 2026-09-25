@@ -2,168 +2,131 @@
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
-    tg.ready();
-    tg.expand();
+  tg.ready();
+  tg.expand();
 }
 
-// Screens
-const screens = document.querySelectorAll('.screen');
-const navigationButtons = document.querySelectorAll('[data-screen]');
+const $ = (selector) => document.querySelector(selector);
 
-function showScreen(screenId) {
-    screens.forEach((screen) => {
-        screen.classList.remove('active');
-    });
+const state = {
+  nickname: "Queen",
+  level: 1,
+  crowns: 0,
+  coins: 1500,
+  gems: 30,
+  avatar: "♛"
+};
 
-    const targetScreen = document.getElementById(screenId);
+function updateProfile() {
+  $("#topNickname").textContent = state.nickname;
+  $("#mainNickname").textContent = state.nickname;
+  $("#profileNickname").textContent = state.nickname;
 
-    if (targetScreen) {
-        targetScreen.classList.add('active');
-    }
+  $("#topLevel").textContent = state.level;
+  $("#mainLevel").textContent = state.level;
+  $("#profileLevel").textContent = state.level;
 
-    document.querySelectorAll('.nav-item').forEach((item) => {
-        item.classList.toggle(
-            'active',
-            item.dataset.screen === screenId
-        );
-    });
+  $("#crownCount").textContent = state.crowns;
+  $("#profileCrowns").textContent = state.crowns;
 
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+  $("#coinCount").textContent = state.coins;
+  $("#profileCoins").textContent = state.coins;
+
+  $("#gemCount").textContent = state.gems;
+  $("#profileGems").textContent = state.gems;
+
+  $("#topAvatar").textContent = state.avatar;
+  $("#mainAvatar").textContent = state.avatar;
+  $("#profileAvatar").textContent = state.avatar;
+  $("#avatarPreview").textContent = state.avatar;
 }
 
-navigationButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        const screenId = button.dataset.screen;
+function showView(viewName) {
+  document.querySelectorAll(".view").forEach((view) => {
+    view.classList.remove("active");
+  });
 
-        if (screenId) {
-            showScreen(screenId);
-        }
-    });
-});
+  const selectedView = $(`#${viewName}View`);
 
-// User data
-let userNickname = '';
-let userAvatar = '';
+  if (selectedView) {
+    selectedView.classList.add("active");
+  }
 
-// Elements
-const nicknameInput = document.getElementById('nickname');
-const avatarInput = document.getElementById('avatarInput');
-const avatarPreview = document.getElementById('avatarPreview');
-const startButton = document.getElementById('startButton');
-const errorMessage = document.getElementById('errorMessage');
-
-const homeNickname = document.getElementById('homeNickname');
-const profileNickname = document.getElementById('profileNickname');
-
-const profileButton = document.getElementById('profileButton');
-const profileAvatar = document.getElementById('profileAvatar');
-
-// Avatar upload
-avatarInput.addEventListener('change', (event) => {
-    const file = event.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    if (!file.type.startsWith('image/')) {
-        errorMessage.textContent = 'Выбери изображение.';
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-        userAvatar = reader.result;
-
-        avatarPreview.innerHTML = '';
-
-        const image = document.createElement('img');
-        image.src = userAvatar;
-        image.alt = 'Аватар пользователя';
-
-        avatarPreview.appendChild(image);
-    };
-
-    reader.readAsDataURL(file);
-});
-
-// Start Queen
-startButton.addEventListener('click', () => {
-    userNickname = nicknameInput.value.trim();
-
-    if (userNickname.length < 2) {
-        errorMessage.textContent = 'Введи ник минимум из 2 символов.';
-        nicknameInput.focus();
-        return;
-    }
-
-    if (userNickname.length > 20) {
-        errorMessage.textContent = 'Ник не должен быть длиннее 20 символов.';
-        return;
-    }
-
-    errorMessage.textContent = '';
-
-    homeNickname.textContent = userNickname;
-    profileNickname.textContent = userNickname;
-
-    if (userAvatar) {
-        profileAvatar.innerHTML = '';
-
-        const image = document.createElement('img');
-        image.src = userAvatar;
-        image.alt = 'Аватар пользователя';
-
-        profileAvatar.appendChild(image);
-
-        profileButton.textContent = '';
-
-        const smallImage = document.createElement('img');
-        smallImage.src = userAvatar;
-        smallImage.alt = 'Аватар пользователя';
-
-        profileButton.appendChild(smallImage);
-    }
-
-    showScreen('home');
-});
-
-// Open profile
-profileButton.addEventListener('click', () => {
-    showScreen('profile');
-});
-
-// Fortune, Upgrader and Duel
-const modeButtons = document.querySelectorAll('[data-mode]');
-
-modeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        const mode = button.dataset.mode;
-
-        if (mode === 'fortune') {
-            alert('✨ Fortune скоро будет доступен!');
-        }
-
-        if (mode === 'upgrader') {
-            alert('⬆️ Upgrader скоро будет доступен!');
-        }
-
-        if (mode === 'duel') {
-            alert('⚔️ Duel скоро будет доступен!');
-        }
-    });
-});
-
-// Status card
-const statusCard = document.getElementById('statusCard');
-
-statusCard.addEventListener('click', () => {
-    alert(
-        '👑 Crowns — твой статус в Queen. ' +
-        'Их нельзя напрямую купить.'
+  document.querySelectorAll(".nav-button").forEach((button) => {
+    button.classList.toggle(
+      "active",
+      button.dataset.view === viewName
     );
+  });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+function openApp() {
+  $("#onboarding").classList.remove("active");
+  $("#appShell").classList.add("active");
+  showView("home");
+  updateProfile();
+}
+
+$("#startButton").addEventListener("click", () => {
+  const nickname = $("#nicknameInput").value.trim();
+
+  if (nickname.length < 2) {
+    $("#nicknameInput").focus();
+    $("#nicknameInput").style.borderColor = "#ff3d9a";
+    return;
+  }
+
+  state.nickname = nickname.slice(0, 20);
+  openApp();
 });
+
+$("#nicknameInput").addEventListener("input", () => {
+  $("#nicknameInput").style.borderColor = "";
+});
+
+document.querySelectorAll("[data-view]").forEach((button) => {
+  button.addEventListener("click", () => {
+    showView(button.dataset.view);
+  });
+});
+
+document.querySelectorAll("[data-mode]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const mode = button.dataset.mode;
+
+    alert(`${mode} скоро будет доступен ✨`);
+  });
+});
+
+document.querySelectorAll("[data-choice]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const result = Math.random() > 0.5
+      ? "Орел"
+      : "Решка";
+
+    $("#flipResult").textContent =
+      `Выпало: ${result} ✨`;
+
+    state.coins += 25;
+    updateProfile();
+  });
+});
+
+$("#avatarPicker").addEventListener("click", () => {
+  const avatars = ["♛", "♡", "✦", "✧", "☾", "♢"];
+  const currentIndex = avatars.indexOf(state.avatar);
+
+  state.avatar = avatars[
+    (currentIndex + 1) % avatars.length
+  ];
+
+  updateProfile();
+});
+
+updateProfile();
+
