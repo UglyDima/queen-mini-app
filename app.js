@@ -1,297 +1,170 @@
 
+
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
-  tg.ready();
-  tg.expand();
+    tg.ready();
+    tg.expand();
 }
 
-
-/* =========================
-   STATE
-========================= */
-
-const state = {
-  nickname: "Queen",
-  level: 1,
-  crowns: 0,
-  coins: 1500,
-  gems: 30,
-  avatar: null,
-  selectedBet: 10
-};
-
-
-/* =========================
-   HELPERS
-========================= */
-
-const $ = (selector) => document.querySelector(selector);
-
-const $$ = (selector) => document.querySelectorAll(selector);
-
-function setImage(selector, imageUrl) {
-  const element = $(selector);
-
-  if (!element) return;
-
-  element.src = imageUrl;
-  element.parentElement.classList.add("has-image");
-}
-
-function updateProfile() {
-  $("#topNickname").textContent = state.nickname;
-  $("#mainNickname").textContent = state.nickname;
-  $("#profileNickname").textContent = state.nickname;
-
-  $("#topLevel").textContent = state.level;
-  $("#mainLevel").textContent = state.level;
-  $("#profileLevel").textContent = state.level;
-
-  $("#crownCount").textContent = state.crowns;
-  $("#profileCrowns").textContent = state.crowns;
-
-  $("#coinCount").textContent = state.coins;
-  $("#profileCoins").textContent = state.coins;
-
-  $("#gemCount").textContent = state.gems;
-  $("#profileGems").textContent = state.gems;
-
-  if (state.avatar) {
-    setImage("#topAvatar", state.avatar);
-    setImage("#mainAvatar", state.avatar);
-    setImage("#profileAvatar", state.avatar);
-  }
-}
-
-
-/* =========================
-   NAVIGATION
-========================= */
+// Screens
+const screens = document.querySelectorAll('.screen');
+const navigationButtons = document.querySelectorAll('[data-screen]');
 
 function showScreen(screenId) {
-  $$(".screen").forEach((screen) => {
-    screen.classList.remove("active");
-  });
-
-  const screen = $(`#${screenId}`);
-
-  if (screen) {
-    screen.classList.add("active");
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-function showView(viewName) {
-  $$(".view").forEach((view) => {
-    view.classList.remove("active");
-  });
-
-  const selectedView = $(`#${viewName}View`);
-
-  if (selectedView) {
-    selectedView.classList.add("active");
-  }
-
-  $$(".nav-button").forEach((button) => {
-    button.classList.toggle(
-      "active",
-      button.dataset.view === viewName
-    );
-  });
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-
-/* =========================
-   ONBOARDING
-========================= */
-
-$("#unlockButton").addEventListener("click", () => {
-  showScreen("setup");
-});
-
-$$("[data-back]").forEach((button) => {
-  button.addEventListener("click", () => {
-    showScreen(button.dataset.back);
-  });
-});
-
-$("#finishSetup").addEventListener("click", () => {
-  const nickname = $("#nicknameInput").value.trim();
-
-  if (nickname.length < 2) {
-    $("#nicknameInput").focus();
-    $("#nicknameInput").style.borderColor = "#ff2f96";
-    return;
-  }
-
-  state.nickname = nickname.slice(0, 20);
-
-  updateProfile();
-  showScreen("appShell");
-  showView("home");
-});
-
-$("#nicknameInput").addEventListener("input", () => {
-  $("#nicknameInput").style.borderColor = "";
-});
-
-
-/* =========================
-   AVATAR UPLOAD
-========================= */
-
-function loadAvatar(file) {
-  if (!file || !file.type.startsWith("image/")) {
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    const imageUrl = event.target.result;
-
-    state.avatar = imageUrl;
-
-    setImage("#avatarPreview", imageUrl);
-    $("#avatarPreview").parentElement.classList.add("has-image");
-
-    updateProfile();
-  };
-
-  reader.readAsDataURL(file);
-}
-
-$("#avatarUpload").addEventListener("change", (event) => {
-  loadAvatar(event.target.files[0]);
-});
-
-$("#profileAvatarUpload").addEventListener("change", (event) => {
-  loadAvatar(event.target.files[0]);
-});
-
-
-/* =========================
-   VIEW NAVIGATION
-========================= */
-
-$$("[data-view]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const viewName = button.dataset.view;
-
-    if (!viewName) return;
-
-    showView(viewName);
-  });
-});
-
-
-/* =========================
-   BACK TO HOME
-========================= */
-
-$$(".back-to-home").forEach((button) => {
-  button.addEventListener("click", () => {
-    showView("home");
-  });
-});
-
-
-/* =========================
-   COIN BETTING
-========================= */
-
-$$("[data-bet]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const bet = Number(button.dataset.bet);
-
-    if (!Number.isFinite(bet) || bet <= 0) {
-      return;
-    }
-
-    state.selectedBet = bet;
-
-    $$(".bet-options button").forEach((item) => {
-      item.classList.remove("selected");
+    screens.forEach((screen) => {
+        screen.classList.remove('active');
     });
 
-    button.classList.add("selected");
+    const targetScreen = document.getElementById(screenId);
 
-    $("#selectedBet").textContent = bet;
-    $("#flipResult").textContent = "";
-  });
-});
-
-$$("[data-choice]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const choice = button.dataset.choice;
-    const bet = state.selectedBet;
-
-    if (state.coins < bet) {
-      $("#flipResult").textContent = "Недостаточно Coins.";
-      return;
+    if (targetScreen) {
+        targetScreen.classList.add('active');
     }
 
-    state.coins -= bet;
+    document.querySelectorAll('.nav-item').forEach((item) => {
+        item.classList.toggle(
+            'active',
+            item.dataset.screen === screenId
+        );
+    });
 
-    const result = Math.random() < 0.5
-      ? "heads"
-      : "tails";
-
-    const won = choice === result;
-
-    if (won) {
-      const profit = Math.max(1, Math.floor(bet * 0.1));
-
-      state.coins += bet + profit;
-
-      $("#flipResult").textContent =
-        `Победа! +${profit} Coins ✨`;
-    } else {
-      $("#flipResult").textContent =
-        "В этот раз не повезло.";
-    }
-
-    updateProfile();
-  });
-});
-
-
-/* =========================
-   OTHER MODES
-========================= */
-
-$$("[data-mode]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const mode = button.dataset.mode;
-
-    if (mode === "Feed") {
-      alert("Лента появится в следующем обновлении ✨");
-      return;
-    }
-
-    alert(`${mode} скоро будет доступен ✨`);
-  });
-});
-
-
-/* =========================
-   INITIALIZATION
-========================= */
-
-updateProfile();
-
-const defaultBet = $("[data-bet='10']");
-
-if (defaultBet) {
-  defaultBet.classList.add("selected");
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
+
+navigationButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const screenId = button.dataset.screen;
+
+        if (screenId) {
+            showScreen(screenId);
+        }
+    });
+});
+
+// User data
+let userNickname = '';
+let userAvatar = '';
+
+// Elements
+const nicknameInput = document.getElementById('nickname');
+const avatarInput = document.getElementById('avatarInput');
+const avatarPreview = document.getElementById('avatarPreview');
+const startButton = document.getElementById('startButton');
+const errorMessage = document.getElementById('errorMessage');
+
+const homeNickname = document.getElementById('homeNickname');
+const profileNickname = document.getElementById('profileNickname');
+
+const profileButton = document.getElementById('profileButton');
+const profileAvatar = document.getElementById('profileAvatar');
+
+// Avatar upload
+avatarInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+        errorMessage.textContent = 'Выбери изображение.';
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        userAvatar = reader.result;
+
+        avatarPreview.innerHTML = '';
+
+        const image = document.createElement('img');
+        image.src = userAvatar;
+        image.alt = 'Аватар пользователя';
+
+        avatarPreview.appendChild(image);
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// Start Queen
+startButton.addEventListener('click', () => {
+    userNickname = nicknameInput.value.trim();
+
+    if (userNickname.length < 2) {
+        errorMessage.textContent = 'Введи ник минимум из 2 символов.';
+        nicknameInput.focus();
+        return;
+    }
+
+    if (userNickname.length > 20) {
+        errorMessage.textContent = 'Ник не должен быть длиннее 20 символов.';
+        return;
+    }
+
+    errorMessage.textContent = '';
+
+    homeNickname.textContent = userNickname;
+    profileNickname.textContent = userNickname;
+
+    if (userAvatar) {
+        profileAvatar.innerHTML = '';
+
+        const image = document.createElement('img');
+        image.src = userAvatar;
+        image.alt = 'Аватар пользователя';
+
+        profileAvatar.appendChild(image);
+
+        profileButton.textContent = '';
+
+        const smallImage = document.createElement('img');
+        smallImage.src = userAvatar;
+        smallImage.alt = 'Аватар пользователя';
+
+        profileButton.appendChild(smallImage);
+    }
+
+    showScreen('home');
+});
+
+// Open profile
+profileButton.addEventListener('click', () => {
+    showScreen('profile');
+});
+
+// Fortune, Upgrader and Duel
+const modeButtons = document.querySelectorAll('[data-mode]');
+
+modeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const mode = button.dataset.mode;
+
+        if (mode === 'fortune') {
+            alert('✨ Fortune скоро будет доступен!');
+        }
+
+        if (mode === 'upgrader') {
+            alert('⬆️ Upgrader скоро будет доступен!');
+        }
+
+        if (mode === 'duel') {
+            alert('⚔️ Duel скоро будет доступен!');
+        }
+    });
+});
+
+// Status card
+const statusCard = document.getElementById('statusCard');
+
+statusCard.addEventListener('click', () => {
+    alert(
+        '👑 Crowns — твой статус в Queen. ' +
+        'Их нельзя напрямую купить.'
+    );
+});
