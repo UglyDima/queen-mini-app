@@ -1,21 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("QUEEN APP.JS ЗАГРУЖЕН");
 
-  const enterBtn = document.getElementById("enterBtn");
-  const lockScreen = document.getElementById("lockScreen");
-  const setupScreen = document.getElementById("setupScreen");
+    const enterBtn = document.getElementById("enterBtn");
+    const lockScreen = document.getElementById("lockScreen");
+    const setupScreen = document.getElementById("setupScreen");
 
-  if (!enterBtn) {
-    console.log("ОШИБКА: enterBtn не найден");
-    return;
-  }
+    console.log("enterBtn:", enterBtn);
+    console.log("lockScreen:", lockScreen);
+    console.log("setupScreen:", setupScreen);
 
-  enterBtn.addEventListener("click", () => {
+    if (!enterBtn || !lockScreen || !setupScreen) {
+        alert("Ошибка Queen: элементы входа не найдены");
+        return;
+    }
 
-    console.log("КНОПКА РАБОТАЕТ");
+    enterBtn.addEventListener("click", () => {
+        console.log("ВХОД НАЖАТ");
 
-    lockScreen.classList.remove("active");
-    setupScreen.classList.add("active");
-
-  });
-
+        lockScreen.classList.remove("active");
+        setupScreen.classList.add("active");
+    });
 });
