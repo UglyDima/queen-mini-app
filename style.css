@@ -34,6 +34,7 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100%;
+
   background: var(--bg);
   color: var(--text);
 
@@ -78,6 +79,7 @@ input {
 #app {
   width: 100%;
   min-height: 100vh;
+
   background:
     radial-gradient(
       circle at 50% -10%,
@@ -90,6 +92,7 @@ input {
 
 .screen {
   display: none;
+
   width: 100%;
   min-height: 100vh;
 }
@@ -106,6 +109,7 @@ input {
 
 #onboarding {
   position: relative;
+
   min-height: 100vh;
 
   display: flex;
@@ -123,9 +127,13 @@ input {
 
 .ambient {
   position: absolute;
+
   pointer-events: none;
+
   border-radius: 50%;
+
   filter: blur(80px);
+
   opacity: 0.45;
 }
 
@@ -191,10 +199,10 @@ input {
 
 
 .brand p {
-  margin:
-    12px 0 0;
+  margin: 12px 0 0;
 
   color: var(--muted);
+
   font-size: 13px;
 }
 
@@ -250,8 +258,7 @@ input {
 
 
 .setup-card h1 {
-  margin:
-    10px 0 8px;
+  margin: 10px 0 8px;
 
   font-size: 27px;
   line-height: 1.1;
@@ -266,8 +273,7 @@ input {
 
 
 .setup-card > .muted {
-  margin:
-    0 0 24px;
+  margin: 0 0 24px;
 
   font-size: 13px;
   line-height: 1.6;
@@ -277,8 +283,7 @@ input {
 .field-label {
   display: block;
 
-  margin:
-    18px 0 8px;
+  margin: 18px 0 8px;
 
   font-size: 12px;
   font-weight: 700;
@@ -289,11 +294,9 @@ input {
 
 #nickname {
   width: 100%;
-
   height: 52px;
 
-  padding:
-    0 16px;
+  padding: 0 16px;
 
   border:
     1px solid #ffffff10;
@@ -332,6 +335,7 @@ input {
 .avatar-picker {
   display: flex;
   align-items: center;
+
   gap: 13px;
 
   width: 100%;
@@ -362,6 +366,7 @@ input {
   display: block;
 
   font-size: 13px;
+
   margin-bottom: 3px;
 }
 
@@ -451,6 +456,7 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 10px;
 
   margin-top: 8px;
@@ -480,6 +486,7 @@ input {
 
 .primary-btn:active {
   transform: scale(0.98);
+
   filter: brightness(0.92);
 }
 
@@ -490,7 +497,7 @@ input {
 
 
 /* =========================
-   MAIN CONTENT
+   MAIN SHELL
 ========================= */
 
 #shell {
@@ -537,15 +544,32 @@ input {
 
 
 @keyframes viewIn {
+
   from {
     opacity: 0;
-    transform: translateY(7px);
+
+    transform:
+      translateY(7px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
+
+    transform:
+      translateY(0);
   }
+
+}
+
+
+/* =========================
+   OLD HEADER
+========================= */
+
+.topbar,
+.brand-mini,
+.top-avatar {
+  display: none !important;
 }
 
 
@@ -577,17 +601,6 @@ input {
 
   text-shadow:
     0 8px 35px #ff4b9f18;
-}
-
-
-/* =========================
-   OLD HEADER HIDDEN
-========================= */
-
-.topbar,
-.brand-mini,
-.top-avatar {
-  display: none !important;
 }
 
 
@@ -646,7 +659,7 @@ input {
 
 
 /* =========================
-   STATUS
+   STATUS CARD
 ========================= */
 
 .status-card {
@@ -771,7 +784,7 @@ input {
 
 
 /* =========================
-   CURRENCIES
+   CURRENCY
 ========================= */
 
 .currency-grid {
@@ -824,7 +837,7 @@ input {
 
 
 /* =========================
-   SECTION
+   SECTION TITLE
 ========================= */
 
 .section-title {
@@ -848,6 +861,7 @@ input {
 .live-dot {
   display: flex;
   align-items: center;
+
   gap: 6px;
 
   color: #777780;
@@ -942,6 +956,7 @@ input {
     7px 0 6px;
 
   font-size: 31px;
+
   letter-spacing: -1px;
 }
 
@@ -1179,7 +1194,8 @@ input {
   width: 92px;
   height: 92px;
 
-  margin: 0 auto 15px;
+  margin:
+    0 auto 15px;
 
   border-radius: 29px;
 
@@ -1214,41 +1230,254 @@ input {
 }
 
 
-.stats {
+/* PROFILE STATUS */
+
+.profile-status {
   display: grid;
 
   grid-template-columns:
-    repeat(3, 1fr);
+    repeat(2, 1fr);
 
-  margin-top: 26px;
+  gap: 10px;
 
-  border-top:
-    1px solid #ffffff08;
-
-  padding-top: 20px;
+  margin-top: 25px;
 }
 
 
-.stats div {
+.profile-stat {
   display: flex;
   flex-direction: column;
+  align-items: center;
 
-  gap: 5px;
+  padding:
+    15px 10px;
+
+  border-radius: 17px;
+
+  background: #ffffff05;
+
+  border:
+    1px solid #ffffff08;
 }
 
 
-.stats b {
+.profile-stat > span {
   font-size: 19px;
+
+  margin-bottom: 7px;
+
+  color: #ff82bd;
 }
 
 
-.stats small {
-  color: var(--muted-2);
+.profile-stat small {
+  color: #66666e;
 
   font-size: 8px;
   font-weight: 800;
 
   letter-spacing: 0.8px;
+}
+
+
+.profile-stat b {
+  margin-top: 5px;
+
+  font-size: 19px;
+}
+
+
+/* PROFILE WALLET */
+
+.profile-wallet {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+
+  margin-top: 10px;
+}
+
+
+.wallet-item {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px;
+
+  border-radius: 17px;
+
+  background: #ffffff05;
+
+  border:
+    1px solid #ffffff08;
+
+  text-align: left;
+}
+
+
+.wallet-item > span {
+  font-size: 21px;
+}
+
+
+.wallet-item small {
+  display: block;
+
+  color: #66666e;
+
+  font-size: 8px;
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+}
+
+
+.wallet-item b {
+  display: block;
+
+  margin-top: 3px;
+
+  font-size: 15px;
+}
+
+
+/* PROFILE COSMETICS */
+
+.profile-section-title {
+  display: flex;
+  align-items: flex-end;
+
+  margin:
+    29px 2px 13px;
+}
+
+
+.profile-section-title h3 {
+  margin:
+    5px 0 0;
+
+  font-size: 19px;
+}
+
+
+.equipped-cosmetics {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+
+.equipped-item {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 13px;
+
+  border-radius: 20px;
+}
+
+
+.equipped-preview {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 17px;
+
+  font-size: 25px;
+}
+
+
+.aura-preview {
+  background:
+    radial-gradient(
+      circle at 35% 30%,
+      #ff9dce35,
+      #ff4b9f0b 60%,
+      #111116 100%
+    );
+
+  color: #ff80bb;
+
+  box-shadow:
+    0 0 25px #ff4b9f15;
+}
+
+
+.frame-preview {
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff12,
+      #ffffff04
+    );
+
+  border:
+    1px solid #ffffff18;
+
+  color: #dddde4;
+}
+
+
+.equipped-info {
+  min-width: 0;
+
+  flex: 1;
+}
+
+
+.equipped-info b {
+  display: block;
+
+  font-size: 13px;
+}
+
+
+.equipped-info span {
+  display: block;
+
+  margin-top: 4px;
+
+  color: #777780;
+
+  font-size: 10px;
+}
+
+
+.equipped-info small {
+  display: block;
+
+  margin-top: 6px;
+
+  color: #ff7fba;
+
+  font-size: 7px;
+  font-weight: 800;
+
+  letter-spacing: 0.7px;
+}
+
+
+.equipped-price {
+  flex-shrink: 0;
+
+  color: #bdbdc5;
+
+  font-size: 10px;
+  font-weight: 700;
 }
 
 
@@ -1468,7 +1697,7 @@ input {
     env(safe-area-inset-bottom);
 
   background:
-    #09090beF;
+    #09090bef;
 
   border-top:
     1px solid #ffffff08;
@@ -1564,9 +1793,7 @@ input {
 }
 
 
-/* =========================
-   CENTER PROFILE BUTTON
-========================= */
+/* CENTER PROFILE */
 
 .bottom-nav .profile-btn {
   min-height: 63px;
@@ -1646,13 +1873,15 @@ input {
     padding-right: 28px;
   }
 
+
   .bottom-nav {
     max-width: 680px;
 
     left: 50%;
     right: auto;
 
-    transform: translateX(-50%);
+    transform:
+      translateX(-50%);
 
     border:
       1px solid #ffffff0b;
@@ -1673,18 +1902,23 @@ input {
     padding-right: 15px;
   }
 
+
   .hero h2 {
     font-size: 26px;
   }
+
 
   .home-wordmark {
     font-size: 49px;
   }
 
+
   .style-item {
     min-height: 150px;
+
     padding: 15px;
   }
+
 
   .bottom-nav button small {
     font-size: 6px;
@@ -1703,7 +1937,10 @@ input {
     padding-bottom:
       max(
         105px,
-        calc(105px + env(safe-area-inset-bottom))
+        calc(
+          105px +
+          env(safe-area-inset-bottom)
+        )
       );
   }
 
@@ -1726,258 +1963,6 @@ input {
 
 ::selection {
   background: #ff4b9f35;
+
   color: #fff;
-}
-/* =========================
-   PROFILE STATUS
-========================= */
-
-.profile-status {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 10px;
-
-  margin-top: 25px;
-}
-
-
-.profile-stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 15px 10px;
-
-  border-radius: 17px;
-
-  background: #ffffff05;
-
-  border:
-    1px solid #ffffff08;
-}
-
-
-.profile-stat > span {
-  font-size: 19px;
-
-  margin-bottom: 7px;
-
-  color: #ff82bd;
-}
-
-
-.profile-stat small {
-  color: #66666e;
-
-  font-size: 8px;
-  font-weight: 800;
-
-  letter-spacing: 0.8px;
-}
-
-
-.profile-stat b {
-  margin-top: 5px;
-
-  font-size: 19px;
-}
-
-
-/* =========================
-   PROFILE WALLET
-========================= */
-
-.profile-wallet {
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 10px;
-
-  margin-top: 10px;
-}
-
-
-.wallet-item {
-  display: flex;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 14px;
-
-  border-radius: 17px;
-
-  background: #ffffff05;
-
-  border:
-    1px solid #ffffff08;
-
-  text-align: left;
-}
-
-
-.wallet-item > span {
-  font-size: 21px;
-}
-
-
-.wallet-item small {
-  display: block;
-
-  color: #66666e;
-
-  font-size: 8px;
-  font-weight: 800;
-
-  letter-spacing: 0.8px;
-}
-
-
-.wallet-item b {
-  display: block;
-
-  margin-top: 3px;
-
-  font-size: 15px;
-}
-
-
-/* =========================
-   PROFILE COSMETICS
-========================= */
-
-.profile-section-title {
-  display: flex;
-  align-items: flex-end;
-
-  margin:
-    29px 2px 13px;
-}
-
-
-.profile-section-title h3 {
-  margin:
-    5px 0 0;
-
-  font-size: 19px;
-}
-
-
-.equipped-cosmetics {
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-}
-
-
-.equipped-item {
-  display: flex;
-  align-items: center;
-
-  gap: 13px;
-
-  padding: 13px;
-
-  border-radius: 20px;
-}
-
-
-.equipped-preview {
-  width: 58px;
-  height: 58px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 17px;
-
-  font-size: 25px;
-}
-
-
-.aura-preview {
-  background:
-    radial-gradient(
-      circle at 35% 30%,
-      #ff9dce35,
-      #ff4b9f0b 60%,
-      #111116 100%
-    );
-
-  color: #ff80bb;
-
-  box-shadow:
-    0 0 25px #ff4b9f15;
-}
-
-
-.frame-preview {
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff12,
-      #ffffff04
-    );
-
-  border:
-    1px solid #ffffff18;
-
-  color: #dddde4;
-}
-
-
-.equipped-info {
-  min-width: 0;
-  flex: 1;
-}
-
-
-.equipped-info b {
-  display: block;
-
-  font-size: 13px;
-}
-
-
-.equipped-info span {
-  display: block;
-
-  margin-top: 4px;
-
-  color: #777780;
-
-  font-size: 10px;
-}
-
-
-.equipped-info small {
-  display: block;
-
-  margin-top: 6px;
-
-  color: #ff7fba;
-
-  font-size: 7px;
-  font-weight: 800;
-
-  letter-spacing: 0.7px;
-}
-
-
-.equipped-price {
-  flex-shrink: 0;
-
-  color: #bdbdc5;
-
-  font-size: 10px;
-  font-weight: 700;
 }
