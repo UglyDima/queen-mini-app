@@ -31,13 +31,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const preview = $("#avatarPreview");
   const error = $("#error");
 
-
   let avatar = "";
   let selectedChoice = "";
   let stake = 50;
 
 
-  /* ==================== NAVIGATION ==================== */
+  /* =========================
+     NAVIGATION
+  ========================= */
 
   function show(id) {
 
@@ -48,14 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
       );
     });
 
-
     nav.forEach((button) => {
       button.classList.toggle(
         "active",
         button.dataset.view === id
       );
     });
-
 
     window.scrollTo({
       top: 0,
@@ -66,14 +65,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   nav.forEach((button) => {
 
-    button.addEventListener("click", () => {
-      show(button.dataset.view);
-    });
+    button.addEventListener(
+      "click",
+      () => {
+        show(button.dataset.view);
+      }
+    );
 
   });
 
 
-  /* ==================== AVATAR ==================== */
+  /* =========================
+     AVATAR
+  ========================= */
 
   function setAvatar(element, src) {
 
@@ -85,18 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
       document.createElement("img");
 
     img.src = src;
-
     img.alt = "Аватар";
 
     element.appendChild(img);
   }
 
-
-  /*
-    Сжимаем фото перед сохранением.
-    Так аватар не ломает localStorage из-за
-    слишком большого исходного файла.
-  */
 
   function compressAvatar(file) {
 
@@ -105,18 +102,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const reader =
         new FileReader();
 
-
       reader.onload = () => {
 
         const image =
           new Image();
 
-
         image.onload = () => {
 
           const canvas =
             document.createElement("canvas");
-
 
           const maxSize = 600;
 
@@ -127,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (width > height) {
 
             if (width > maxSize) {
+
               height =
                 height * maxSize / width;
 
@@ -136,12 +131,12 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
 
             if (height > maxSize) {
+
               width =
                 width * maxSize / height;
 
               height = maxSize;
             }
-
           }
 
 
@@ -181,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onerror = reject;
 
       reader.readAsDataURL(file);
-
     });
 
   }
@@ -193,7 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const selectedFile =
         event.target.files?.[0];
-
 
       if (!selectedFile) return;
 
@@ -252,7 +245,60 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== LOGIN ==================== */
+  /* =========================
+     APPLY USER
+  ========================= */
+
+  function applyUser(name, avatarSrc) {
+
+    if (name) {
+
+      $("#name").textContent =
+        name;
+
+      $("#profileName").textContent =
+        name;
+    }
+
+
+    if (avatarSrc) {
+
+      setAvatar(
+        $("#homeAvatar"),
+        avatarSrc
+      );
+
+      setAvatar(
+        $("#profileAvatar"),
+        avatarSrc
+      );
+    }
+
+  }
+
+
+  /* =========================
+     ENTER QUEEN
+  ========================= */
+
+  function enterQueen() {
+
+    onboarding.classList.remove(
+      "active"
+    );
+
+    shell.classList.add(
+      "active"
+    );
+
+    show("home");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant"
+    });
+  }
+
 
   $("#start")?.addEventListener(
     "click",
@@ -300,54 +346,27 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
 
-      $("#name").textContent =
-        name;
-
-      $("#profileName").textContent =
-        name;
-
-
-      if (avatar) {
-
-        setAvatar(
-          $("#homeAvatar"),
-          avatar
-        );
-
-        setAvatar(
-          $("#profileAvatar"),
-          avatar
-        );
-
-        setAvatar(
-          $("#profileTop"),
-          avatar
-        );
-
-      }
-
-
-      onboarding.classList.remove(
-        "active"
-      );
-
-      shell.classList.add(
-        "active"
+      applyUser(
+        name,
+        avatar
       );
 
 
-      show("home");
+      enterQueen();
 
     }
   );
 
 
-  /* ==================== RESTORE USER ==================== */
+  /* =========================
+     AUTO LOGIN
+  ========================= */
 
   const savedName =
     localStorage.getItem(
       "queen_username"
     );
+
 
   const savedAvatar =
     localStorage.getItem(
@@ -360,72 +379,50 @@ document.addEventListener("DOMContentLoaded", () => {
     nick.value =
       savedName;
 
-    $("#name").textContent =
-      savedName;
-
-    $("#profileName").textContent =
-      savedName;
-  }
-
-
-  if (savedAvatar) {
-
     avatar =
-      savedAvatar;
+      savedAvatar || "";
 
-
-    setAvatar(
-      preview,
-      avatar
+    applyUser(
+      savedName,
+      savedAvatar
     );
 
-    setAvatar(
-      $("#homeAvatar"),
-      avatar
+
+    /*
+      Если пользователь уже зарегистрирован,
+      регистрационный экран вообще не показываем.
+    */
+
+    onboarding.classList.remove(
+      "active"
     );
 
-    setAvatar(
-      $("#profileAvatar"),
-      avatar
+    shell.classList.add(
+      "active"
     );
 
-    setAvatar(
-      $("#profileTop"),
-      avatar
+    show("home");
+
+  } else {
+
+    /*
+      Новый пользователь видит только регистрацию.
+    */
+
+    onboarding.classList.add(
+      "active"
+    );
+
+    shell.classList.remove(
+      "active"
     );
 
   }
 
 
-  /* ==================== TOP PROFILE ==================== */
-
-  $("#profileTop")?.addEventListener(
-    "click",
-    () => show("profile")
-  );
-
-
-  /* ==================== MINI GAME OPEN ==================== */
-
-  $$("[data-open]").forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          show(
-            button.dataset.open
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  /* ==================== FLIP CHOICE ==================== */
+  /* =========================
+     FLIP
+  ========================= */
 
   $$(".choice").forEach(
     (button) => {
@@ -440,9 +437,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
           $$(".choice").forEach(
             (item) => {
+
               item.classList.remove(
                 "selected"
               );
+
             }
           );
 
@@ -457,8 +456,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-
-  /* ==================== STAKE ==================== */
 
   $$("[data-stake]").forEach(
     (button) => {
@@ -475,9 +472,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
           $$("[data-stake]").forEach(
             (item) => {
+
               item.classList.remove(
                 "selected"
               );
+
             }
           );
 
@@ -492,8 +491,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   );
 
-
-  /* ==================== FLIP GAME ==================== */
 
   $("#flipPlay")?.addEventListener(
     "click",
@@ -556,7 +553,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           coins += stake;
 
-
           result.textContent =
             `Выпало: ${
               outcome === "heads"
@@ -567,7 +563,6 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
 
           coins -= stake;
-
 
           result.textContent =
             `Выпало: ${
@@ -580,10 +575,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         coinsElement.textContent =
-          coins.toLocaleString(
-            "ru-RU"
-          );
+          coins.toLocaleString("ru-RU");
 
+
+        /*
+          Обновляем Coins и в профиле.
+        */
+
+        const profileCoins =
+          $("#profileCoins");
+
+        if (profileCoins) {
+
+          profileCoins.textContent =
+            coins.toLocaleString("ru-RU");
+
+        }
 
       }, 450);
 
@@ -591,7 +598,27 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== GAMES ==================== */
+  /* =========================
+     MINI GAMES
+  ========================= */
+
+  $$("[data-open]").forEach(
+    (button) => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          show(
+            button.dataset.open
+          );
+
+        }
+      );
+
+    }
+  );
+
 
   $$("[data-mode]").forEach(
     (button) => {
@@ -632,7 +659,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== STYLE ==================== */
+  /* =========================
+     STYLE
+  ========================= */
 
   $$(".style-item").forEach(
     (button) => {
@@ -663,7 +692,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== PARTY ==================== */
+  /* =========================
+     PARTY
+  ========================= */
 
   $(".secondary-btn")?.addEventListener(
     "click",
@@ -676,8 +707,12 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== START ==================== */
+  /* =========================
+     START
+  ========================= */
 
-  show("home");
+  if (savedName) {
+    show("home");
+  }
 
 });
