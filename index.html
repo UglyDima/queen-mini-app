@@ -88,7 +88,177 @@
 </section>
 
 
-<section id="shell" class="screen">
+<section id="auth" class="screen active">
+
+  <!-- LOGIN -->
+
+  <div id="loginScreen" class="auth-screen active">
+
+    <div class="brand">
+      <div class="crown-mark">♛</div>
+
+      <div class="wordmark">
+        Queen
+      </div>
+
+      <p>
+        YOUR SOCIAL WORLD
+      </p>
+    </div>
+
+    <div class="glass-card auth-card">
+
+      <span class="eyebrow">
+        WELCOME BACK
+      </span>
+
+      <h1>
+        С возвращением.
+      </h1>
+
+      <p class="muted">
+        Войди в свой мир Queen.
+      </p>
+
+      <button
+        id="loginBtn"
+        class="primary-btn"
+        type="button"
+      >
+        Войти в Queen
+        <span>→</span>
+      </button>
+
+      <button
+        id="registerBtn"
+        class="auth-link"
+        type="button"
+      >
+        Создать аккаунт
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- REGISTER -->
+
+  <div id="registerScreen" class="auth-screen">
+
+    <div class="brand">
+      <div class="crown-mark">♛</div>
+
+      <div class="wordmark">
+        Queen
+      </div>
+
+      <p>
+        Твой статус начинается здесь.
+      </p>
+    </div>
+
+
+    <div class="glass-card setup-card">
+
+      <span class="eyebrow">
+        CREATE YOUR IDENTITY
+      </span>
+
+      <h1>
+        Войди в свой мир.
+      </h1>
+
+      <p class="muted">
+        Выбери ник и образ. Остальное создашь внутри Queen.
+      </p>
+
+
+      <label
+        class="field-label"
+        for="nickname"
+      >
+        Никнейм
+      </label>
+
+
+      <input
+        id="nickname"
+        maxlength="20"
+        autocomplete="off"
+        placeholder="Например, queen"
+      >
+
+
+      <label class="field-label">
+        Аватар
+      </label>
+
+
+      <label
+        class="avatar-picker"
+        for="avatarInput"
+      >
+
+        <div
+          id="avatarPreview"
+          class="avatar avatar-placeholder"
+        >
+          ＋
+        </div>
+
+        <div>
+          <strong>
+            Добавить фото
+          </strong>
+
+          <span>
+            JPG / PNG
+          </span>
+        </div>
+
+        <b>›</b>
+
+      </label>
+
+
+      <input
+        id="avatarInput"
+        type="file"
+        accept="image/*"
+        hidden
+      >
+
+
+      <div
+        id="error"
+        class="error"
+      ></div>
+
+
+      <button
+        id="start"
+        class="primary-btn"
+        type="button"
+      >
+        Создать аккаунт
+        <span>→</span>
+      </button>
+
+
+      <button
+        id="backToLogin"
+        class="auth-link"
+        type="button"
+      >
+        ← Назад ко входу
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
   <div class="content">
 
