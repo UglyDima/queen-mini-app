@@ -9,15 +9,15 @@
     content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"
   >
 
-  <meta name="theme-color" content="#08070b">
+  <meta name="theme-color" content="#080808">
 
-  <title>QUEEN</title>
+  <title>Queen</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Allura&family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet"
   >
 
@@ -36,9 +36,8 @@
 
   <section id="onboarding" class="screen active">
 
-    <div class="orb orb-a"></div>
-    <div class="orb orb-b"></div>
-
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
 
     <div class="brand">
 
@@ -47,7 +46,7 @@
       </div>
 
       <div class="wordmark">
-        QUEEN<span>.</span>
+        Queen
       </div>
 
       <p>
@@ -63,11 +62,9 @@
         CREATE YOUR IDENTITY
       </span>
 
-
       <h1>
         Войди в свой мир.
       </h1>
-
 
       <p class="muted">
         Выбери ник и образ. Остальное создашь внутри Queen.
@@ -81,7 +78,6 @@
         Никнейм
       </label>
 
-
       <input
         id="nickname"
         maxlength="20"
@@ -93,7 +89,6 @@
       <label class="field-label">
         Аватар
       </label>
-
 
       <label
         class="avatar-picker"
@@ -107,7 +102,6 @@
           ＋
         </div>
 
-
         <div>
 
           <strong>
@@ -119,7 +113,6 @@
           </span>
 
         </div>
-
 
         <b>
           ›
@@ -142,28 +135,10 @@
       ></div>
 
 
-      <!-- ВАЖНО: onclick встроен прямо сюда -->
       <button
         id="start"
         class="primary-btn"
         type="button"
-        onclick="
-          const n = document.getElementById('nickname').value.trim();
-          const e = document.getElementById('error');
-
-          if (n.length < 2) {
-            e.textContent = 'Введи ник минимум из 2 символов.';
-            return;
-          }
-
-          localStorage.setItem('queen_username', n);
-
-          document.getElementById('name').textContent = n;
-          document.getElementById('profileName').textContent = n;
-
-          document.getElementById('onboarding').classList.remove('active');
-          document.getElementById('shell').classList.add('active');
-        "
       >
 
         Войти в Queen
@@ -180,7 +155,7 @@
 
 
 
-  <!-- ==================== MAIN APP ==================== -->
+  <!-- ==================== APP ==================== -->
 
   <section
     id="shell"
@@ -188,7 +163,7 @@
   >
 
 
-    <!-- TOP BAR -->
+    <!-- TOP -->
 
     <header class="topbar">
 
@@ -197,7 +172,7 @@
         data-view="home"
         type="button"
       >
-        QUEEN<span>.</span>
+        Queen
       </button>
 
 
@@ -231,14 +206,10 @@
               WELCOME TO YOUR ERA
             </span>
 
-
             <h2>
               Привет,
-              <span id="name">
-                Queen
-              </span>
+              <span id="name">Queen</span>
             </h2>
-
 
             <p class="muted">
               Статус. Связи. Стиль.
@@ -268,7 +239,6 @@
               ♛
             </div>
 
-
             <div>
 
               <span class="eyebrow">
@@ -280,7 +250,6 @@
               </strong>
 
             </div>
-
 
             <div class="level-badge">
               LVL 01
@@ -319,12 +288,9 @@
 
         <div class="currency-grid">
 
-
           <div class="currency glass-card">
 
-            <span>
-              🪙
-            </span>
+            <span>🪙</span>
 
             <small>
               COINS
@@ -339,9 +305,7 @@
 
           <div class="currency glass-card">
 
-            <span>
-              💎
-            </span>
+            <span>💎</span>
 
             <small>
               GEMS
@@ -352,7 +316,6 @@
             </b>
 
           </div>
-
 
         </div>
 
@@ -374,7 +337,6 @@
 
           </div>
 
-
           <span class="live-dot">
             LIVE
           </span>
@@ -388,13 +350,11 @@
             Q
           </div>
 
-
           <div>
 
             <strong>
               Добро пожаловать в Queen
             </strong>
-
 
             <p class="muted">
               Стиль, люди, события и твоя история —
@@ -420,11 +380,9 @@
           PLAY & EARN
         </span>
 
-
         <h2>
           Flip
         </h2>
-
 
         <p class="muted">
           Играй за внутренние Coins.
@@ -433,12 +391,11 @@
 
         <div class="game-card glass-card">
 
-
           <div
             id="coin"
             class="coin"
           >
-            Q
+            🪙
           </div>
 
 
@@ -446,11 +403,9 @@
             Монетка Queen
           </strong>
 
-
           <span class="muted">
             Выбери сторону и сделай ход.
           </span>
-
 
 
           <div class="bet-row">
@@ -463,7 +418,6 @@
               ОРЁЛ
             </button>
 
-
             <button
               class="choice"
               data-choice="tails"
@@ -475,7 +429,6 @@
           </div>
 
 
-
           <div class="stake-row">
 
             <button
@@ -485,14 +438,12 @@
               50
             </button>
 
-
             <button
               data-stake="100"
               type="button"
             >
               100
             </button>
-
 
             <button
               data-stake="250"
@@ -502,7 +453,6 @@
             </button>
 
           </div>
-
 
 
           <button
@@ -536,35 +486,29 @@
           YOUR PEOPLE
         </span>
 
-
         <h2>
           Party
         </h2>
-
 
         <p class="muted">
           Комьюнити и люди вокруг тебя.
         </p>
 
 
-
         <div class="feature glass-card">
 
           <div class="feature-icon">
-            ◎
+            👥
           </div>
-
 
           <h3>
             Твоя Party
           </h3>
 
-
           <p class="muted">
             Создавай свою группу, собирай участников
             и поднимай общий статус.
           </p>
-
 
           <button
             class="secondary-btn"
@@ -576,264 +520,19 @@
         </div>
 
 
-
         <div class="feature glass-card">
 
           <div class="feature-icon">
             ♛
           </div>
 
-
           <h3>
             Рейтинг Party
           </h3>
 
-
           <p class="muted">
             Соревнования и позиции появятся здесь.
           </p>
-
-        </div>
-
-      </section>
-
-
-
-      <!-- ==================== GAMES ==================== -->
-
-      <section
-        id="games"
-        class="view"
-      >
-
-        <span class="eyebrow">
-          QUEEN ARCADE
-        </span>
-
-
-        <h2>
-          Mini Games
-        </h2>
-
-
-        <p class="muted">
-          Быстрые внутренние игры Queen.
-        </p>
-
-
-
-        <button
-          class="mode-card glass-card"
-          data-open="flip"
-          type="button"
-        >
-
-          <span class="mode-icon">
-            ◉
-          </span>
-
-
-          <div>
-
-            <b>
-              Flip
-            </b>
-
-            <small>
-              Монетка • Coins
-            </small>
-
-          </div>
-
-
-          <span>
-            ›
-          </span>
-
-        </button>
-
-
-
-        <button
-          class="mode-card glass-card"
-          data-mode="fortune"
-          type="button"
-        >
-
-          <span class="mode-icon">
-            ✦
-          </span>
-
-
-          <div>
-
-            <b>
-              Fortune
-            </b>
-
-            <small>
-              Ежедневная награда
-            </small>
-
-          </div>
-
-
-          <span>
-            ›
-          </span>
-
-        </button>
-
-
-
-        <button
-          class="mode-card glass-card"
-          data-mode="upgrader"
-          type="button"
-        >
-
-          <span class="mode-icon">
-            ↗
-          </span>
-
-
-          <div>
-
-            <b>
-              Upgrader
-            </b>
-
-            <small>
-              Улучшение предметов
-            </small>
-
-          </div>
-
-
-          <span>
-            ›
-          </span>
-
-        </button>
-
-
-        <div
-          id="gameNotice"
-          class="notice"
-        ></div>
-
-      </section>
-
-
-
-      <!-- ==================== STYLE ==================== -->
-
-      <section
-        id="style"
-        class="view"
-      >
-
-        <span class="eyebrow">
-          YOUR IDENTITY
-        </span>
-
-
-        <h2>
-          Style
-        </h2>
-
-
-        <p class="muted">
-          Образ, рамки, титулы и эффекты.
-        </p>
-
-
-
-        <div class="style-grid">
-
-
-          <button
-            class="style-item glass-card selected"
-            type="button"
-          >
-
-            <span class="style-icon pink">
-              ◈
-            </span>
-
-            <b>
-              Pink Aura
-            </b>
-
-            <small>
-              RARE • EQUIPPED
-            </small>
-
-          </button>
-
-
-
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-
-            <span class="style-icon">
-              ▣
-            </span>
-
-            <b>
-              Gloss Frame
-            </b>
-
-            <small>
-              EPIC • 500 COINS
-            </small>
-
-          </button>
-
-
-
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-
-            <span class="style-icon">
-              ◆
-            </span>
-
-            <b>
-              Night Frame
-            </b>
-
-            <small>
-              COMMON • 250 COINS
-            </small>
-
-          </button>
-
-
-
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-
-            <span class="style-icon">
-              Q
-            </span>
-
-            <b>
-              Queen Title
-            </b>
-
-            <small>
-              LEGENDARY • 30 GEMS
-            </small>
-
-          </button>
-
 
         </div>
 
@@ -852,14 +551,12 @@
           YOUR SPACE
         </span>
 
-
         <h2>
           Profile
         </h2>
 
 
         <div class="profile-card glass-card">
-
 
           <div
             id="profileAvatar"
@@ -879,7 +576,6 @@
           </span>
 
 
-
           <div class="stats">
 
             <div>
@@ -887,12 +583,10 @@
               <small>CROWNS</small>
             </div>
 
-
             <div>
               <b>01</b>
               <small>LEVEL</small>
             </div>
-
 
             <div>
               <b>0</b>
@@ -906,6 +600,228 @@
       </section>
 
 
+
+      <!-- ==================== STYLE ==================== -->
+
+      <section
+        id="style"
+        class="view"
+      >
+
+        <span class="eyebrow">
+          YOUR IDENTITY
+        </span>
+
+        <h2>
+          Style
+        </h2>
+
+        <p class="muted">
+          Образ, рамки, титулы и эффекты.
+        </p>
+
+
+        <div class="style-grid">
+
+          <button
+            class="style-item glass-card selected"
+            type="button"
+          >
+
+            <span class="style-icon">
+              ✦
+            </span>
+
+            <b>
+              Pink Aura
+            </b>
+
+            <small>
+              RARE • EQUIPPED
+            </small>
+
+          </button>
+
+
+          <button
+            class="style-item glass-card"
+            type="button"
+          >
+
+            <span class="style-icon">
+              ◇
+            </span>
+
+            <b>
+              Gloss Frame
+            </b>
+
+            <small>
+              EPIC • 500 COINS
+            </small>
+
+          </button>
+
+
+          <button
+            class="style-item glass-card"
+            type="button"
+          >
+
+            <span class="style-icon">
+              ⟡
+            </span>
+
+            <b>
+              Night Frame
+            </b>
+
+            <small>
+              COMMON • 250 COINS
+            </small>
+
+          </button>
+
+
+          <button
+            class="style-item glass-card"
+            type="button"
+          >
+
+            <span class="style-icon">
+              ♛
+            </span>
+
+            <b>
+              Queen Title
+            </b>
+
+            <small>
+              LEGENDARY • 30 GEMS
+            </small>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ==================== MINI GAMES ==================== -->
+
+      <section
+        id="games"
+        class="view"
+      >
+
+        <span class="eyebrow">
+          QUEEN ARCADE
+        </span>
+
+        <h2>
+          Mini Games
+        </h2>
+
+        <p class="muted">
+          Быстрые внутренние игры Queen.
+        </p>
+
+
+        <button
+          class="mode-card glass-card"
+          data-open="flip"
+          type="button"
+        >
+
+          <span class="mode-icon">
+            🪙
+          </span>
+
+          <div>
+
+            <b>
+              Flip
+            </b>
+
+            <small>
+              Монетка • Coins
+            </small>
+
+          </div>
+
+          <span>
+            ›
+          </span>
+
+        </button>
+
+
+        <button
+          class="mode-card glass-card"
+          data-mode="fortune"
+          type="button"
+        >
+
+          <span class="mode-icon">
+            ✦
+          </span>
+
+          <div>
+
+            <b>
+              Fortune
+            </b>
+
+            <small>
+              Ежедневная награда
+            </small>
+
+          </div>
+
+          <span>
+            ›
+          </span>
+
+        </button>
+
+
+        <button
+          class="mode-card glass-card"
+          data-mode="upgrader"
+          type="button"
+        >
+
+          <span class="mode-icon">
+            ↗
+          </span>
+
+          <div>
+
+            <b>
+              Upgrader
+            </b>
+
+            <small>
+              Улучшение предметов
+            </small>
+
+          </div>
+
+          <span>
+            ›
+          </span>
+
+        </button>
+
+
+        <div
+          id="gameNotice"
+          class="notice"
+        ></div>
+
+      </section>
+
     </div>
 
 
@@ -914,14 +830,13 @@
 
     <nav class="bottom-nav">
 
-
       <button
         data-view="flip"
         type="button"
       >
 
         <span>
-          ◉
+          🪙
         </span>
 
         <small>
@@ -931,14 +846,13 @@
       </button>
 
 
-
       <button
         data-view="party"
         type="button"
       >
 
         <span>
-          ◎
+          👥
         </span>
 
         <small>
@@ -948,43 +862,10 @@
       </button>
 
 
+      <!-- CENTER = PROFILE -->
 
       <button
-        class="games-btn"
-        data-view="games"
-        type="button"
-      >
-
-        <span>
-          Q
-        </span>
-
-        <small>
-          GAMES
-        </small>
-
-      </button>
-
-
-
-      <button
-        data-view="style"
-        type="button"
-      >
-
-        <span>
-          ▣
-        </span>
-
-        <small>
-          STYLE
-        </small>
-
-      </button>
-
-
-
-      <button
+        class="profile-btn"
         data-view="profile"
         type="button"
       >
@@ -1000,6 +881,39 @@
       </button>
 
 
+      <button
+        data-view="style"
+        type="button"
+      >
+
+        <span>
+          ✦
+        </span>
+
+        <small>
+          STYLE
+        </small>
+
+      </button>
+
+
+      <!-- MINI GAMES = RIGHT -->
+
+      <button
+        data-view="games"
+        type="button"
+      >
+
+        <span>
+          🕹
+        </span>
+
+        <small>
+          GAMES
+        </small>
+
+      </button>
+
     </nav>
 
   </section>
@@ -1007,9 +921,7 @@
 </main>
 
 
-
-<!-- Версия увеличена, чтобы Telegram не держал старый JS -->
-<script src="./app.js?v=1003"></script>
+<script src="./app.js?v=1004"></script>
 
 </body>
 </html>
