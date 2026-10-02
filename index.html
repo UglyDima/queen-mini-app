@@ -1,166 +1,423 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#08080c">
-  <title>Queen</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#08070b">
+  <title>QUEEN</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 
 <body>
+<main id="app">
 
-  <!-- LOCK -->
-  <section id="lockScreen" class="screen active">
-    <div class="lock-glow"></div>
+  <!-- ONBOARDING -->
+  <section id="onboarding" class="screen active">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
 
-    <div class="lock-content">
-      <div class="queen-mark">♛</div>
-
-      <h1>Queen</h1>
-      <p>Social Game</p>
-
-      <button id="enterBtn" class="primary-btn">
-        Войти
-      </button>
+    <div class="brand">
+      <div class="crown-mark">♛</div>
+      <div class="wordmark">QUEEN<span>.</span></div>
+      <p>Твой статус начинается здесь.</p>
     </div>
-  </section>
 
+    <div class="glass-card setup-card">
+      <span class="eyebrow">CREATE YOUR IDENTITY</span>
 
-  <!-- SETUP -->
-  <section id="setupScreen" class="screen">
-    <div class="setup-card">
+      <h1>Войди в свой мир.</h1>
 
-      <button class="back-btn" data-back="lockScreen">‹</button>
-
-      <div class="setup-logo">♛</div>
-
-      <h2>Создай свой профиль</h2>
       <p class="muted">
-        Это твоё пространство в Queen
+        Выбери ник и образ. Остальное создашь внутри Queen.
       </p>
 
-      <label class="avatar-upload">
-        <input type="file" id="avatarInput" accept="image/*">
+      <label class="field-label" for="nickname">Никнейм</label>
 
-        <div id="avatarPreview" class="avatar-preview">
-          <span>+</span>
+      <input
+        id="nickname"
+        maxlength="20"
+        autocomplete="off"
+        placeholder="Например, queen"
+      >
+
+      <label class="field-label">Аватар</label>
+
+      <label class="avatar-picker" for="avatarInput">
+        <div id="avatarPreview" class="avatar avatar-placeholder">＋</div>
+
+        <div>
+          <strong>Добавить фото</strong>
+          <span>JPG / PNG</span>
         </div>
 
-        <small>Добавить фото</small>
+        <b>›</b>
       </label>
 
-      <label class="field">
-        <span>Имя</span>
-        <input
-          id="nicknameInput"
-          type="text"
-          maxlength="18"
-          placeholder="Твоё имя"
-          autocomplete="off"
-        >
-      </label>
+      <input
+        id="avatarInput"
+        type="file"
+        accept="image/*"
+        hidden
+      >
 
-      <button id="finishSetup" class="primary-btn">
-        Продолжить
+      <div id="error" class="error"></div>
+
+      <button id="start" class="primary-btn">
+        Войти в Queen
+        <span>→</span>
       </button>
-
     </div>
   </section>
 
 
-  <!-- APP -->
-  <section id="appScreen" class="screen">
+  <!-- MAIN APP -->
+  <section id="shell" class="screen">
 
-    <!-- HEADER -->
     <header class="topbar">
+      <button class="brand-mini" data-view="home">
+        QUEEN<span>.</span>
+      </button>
 
-      <div class="brand">
-        <span class="brand-symbol">♛</span>
-        <span>Queen</span>
-      </div>
-
-      <div class="balances">
-        <div class="balance">
-          <span class="coin-icon">◈</span>
-          <b id="coinsValue">1500</b>
-        </div>
-
-        <div class="balance">
-          <span class="gem-icon">◆</span>
-          <b id="gemsValue">30</b>
-        </div>
-      </div>
-
+      <button id="profileTop" class="top-avatar">♙</button>
     </header>
 
 
-    <!-- HOME -->
-    <main id="homeView" class="view active">
+    <div class="content">
 
-      <div class="hero-card">
+      <!-- HOME -->
+      <section id="home" class="view active">
 
-        <div class="hero-info">
-          <span class="eyebrow">WELCOME BACK</span>
+        <div class="hero">
+          <div>
+            <span class="eyebrow">WELCOME TO YOUR ERA</span>
 
-          <h1>
-            Привет,<br>
-            <span id="heroName">Queen</span>
-          </h1>
+            <h2>
+              Привет,
+              <span id="name">Queen</span>
+            </h2>
 
-          <p>
-            Играй. Общайся. Создавай свой статус.
+            <p class="muted">
+              Статус. Связи. Стиль.
+            </p>
+          </div>
+
+          <div id="homeAvatar" class="avatar hero-avatar">
+            ♙
+          </div>
+        </div>
+
+
+        <div class="status-card glass-card">
+
+          <div class="status-head">
+
+            <div class="crown-orb">♛</div>
+
+            <div>
+              <span class="eyebrow">YOUR CROWNS</span>
+              <strong id="crowns">0</strong>
+            </div>
+
+            <div class="level-badge">
+              LVL 01
+            </div>
+
+          </div>
+
+          <div class="xp-row">
+            <span>0 XP</span>
+            <span>100 XP</span>
+          </div>
+
+          <div class="progress">
+            <i></i>
+          </div>
+
+          <p class="muted">
+            Crowns — твой социальный статус в Queen.
           </p>
+
         </div>
 
-        <div class="hero-avatar-wrap">
-          <div id="heroAvatar" class="hero-avatar">
-            <span>♛</span>
+
+        <div class="currency-grid">
+
+          <div class="currency glass-card">
+            <span>🪙</span>
+            <small>COINS</small>
+            <b id="coins">1 500</b>
           </div>
 
-          <div class="level-badge">
-            LVL <span id="levelValue">1</span>
+          <div class="currency glass-card">
+            <span>💎</span>
+            <small>GEMS</small>
+            <b id="gems">30</b>
           </div>
+
         </div>
 
-      </div>
 
+        <div class="section-title">
 
-      <section class="section">
-
-        <div class="section-heading">
           <div>
-            <span class="eyebrow">EXPLORE</span>
-            <h2>Queen World</h2>
+            <span class="eyebrow">QUEEN COMMUNITY</span>
+            <h3>Твоя лента</h3>
           </div>
+
+          <span class="live-dot">LIVE</span>
+
         </div>
 
 
-        <div class="feature-grid">
+        <div class="feed-card glass-card">
 
-          <button class="feature-card pink-card" data-view="games">
-            <span class="feature-icon">✦</span>
-            <strong>Mini Games</strong>
-            <small>Играй и получай награды</small>
+          <div class="feed-art">Q</div>
+
+          <div>
+            <strong>Добро пожаловать в Queen</strong>
+
+            <p class="muted">
+              Стиль, люди, события и твоя история —
+              всё начинается здесь.
+            </p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- FLIP -->
+      <section id="flip" class="view">
+
+        <span class="eyebrow">PLAY & EARN</span>
+
+        <h2>Flip</h2>
+
+        <p class="muted">
+          Играй за внутренние Coins.
+        </p>
+
+
+        <div class="game-card glass-card">
+
+          <div id="coin" class="coin">
+            Q
+          </div>
+
+          <strong>Монетка Queen</strong>
+
+          <span class="muted">
+            Выбери сторону и сделай ход.
+          </span>
+
+
+          <div class="bet-row">
+
+            <button class="choice" data-choice="heads">
+              ОРЁЛ
+            </button>
+
+            <button class="choice" data-choice="tails">
+              РЕШКА
+            </button>
+
+          </div>
+
+
+          <div class="stake-row">
+
+            <button data-stake="50">50</button>
+            <button data-stake="100">100</button>
+            <button data-stake="250">250</button>
+
+          </div>
+
+
+          <button id="flipPlay" class="primary-btn">
+            Бросить монетку
           </button>
 
-          <button class="feature-card" data-view="party">
-            <span class="feature-icon">◉</span>
-            <strong>Party</strong>
-            <small>Своя группа и общение</small>
+          <p id="flipResult" class="game-result"></p>
+
+        </div>
+
+      </section>
+
+
+      <!-- PARTY -->
+      <section id="party" class="view">
+
+        <span class="eyebrow">YOUR PEOPLE</span>
+
+        <h2>Party</h2>
+
+        <p class="muted">
+          Комьюнити и люди вокруг тебя.
+        </p>
+
+
+        <div class="feature glass-card">
+
+          <div class="feature-icon">◎</div>
+
+          <h3>Твоя Party</h3>
+
+          <p class="muted">
+            Создавай свою группу, собирай участников
+            и поднимай общий статус.
+          </p>
+
+          <button class="secondary-btn">
+            Создать Party
           </button>
 
-          <button class="feature-card" data-view="feed">
-            <span class="feature-icon">▤</span>
-            <strong>Лента</strong>
-            <small>Твой мир. Твои люди.</small>
+        </div>
+
+
+        <div class="feature glass-card">
+
+          <div class="feature-icon">♛</div>
+
+          <h3>Рейтинг Party</h3>
+
+          <p class="muted">
+            Соревнования и позиции появятся здесь.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- MINI GAMES -->
+      <section id="games" class="view">
+
+        <span class="eyebrow">QUEEN ARCADE</span>
+
+        <h2>Mini Games</h2>
+
+        <p class="muted">
+          Быстрые внутренние игры Queen.
+        </p>
+
+
+        <button class="mode-card glass-card" data-open="flip">
+
+          <span class="mode-icon">◉</span>
+
+          <div>
+            <b>Flip</b>
+            <small>Монетка • Coins</small>
+          </div>
+
+          <span>›</span>
+
+        </button>
+
+
+        <button class="mode-card glass-card" data-mode="fortune">
+
+          <span class="mode-icon">✦</span>
+
+          <div>
+            <b>Fortune</b>
+            <small>Ежедневная награда</small>
+          </div>
+
+          <span>›</span>
+
+        </button>
+
+
+        <button class="mode-card glass-card" data-mode="upgrader">
+
+          <span class="mode-icon">↗</span>
+
+          <div>
+            <b>Upgrader</b>
+            <small>Улучшение предметов</small>
+          </div>
+
+          <span>›</span>
+
+        </button>
+
+
+        <div id="gameNotice" class="notice"></div>
+
+      </section>
+
+
+      <!-- STYLE -->
+      <section id="style" class="view">
+
+        <span class="eyebrow">YOUR IDENTITY</span>
+
+        <h2>Style</h2>
+
+        <p class="muted">
+          Образ, рамки, титулы и эффекты.
+        </p>
+
+
+        <div class="style-grid">
+
+          <button class="style-item glass-card selected">
+
+            <span class="style-icon pink">◈</span>
+
+            <b>Pink Aura</b>
+
+            <small>
+              RARE • EQUIPPED
+            </small>
+
           </button>
 
-          <button class="feature-card" data-view="style">
-            <span class="feature-icon">◇</span>
-            <strong>Style</strong>
-            <small>Настрой свой профиль</small>
+
+          <button class="style-item glass-card">
+
+            <span class="style-icon">▣</span>
+
+            <b>Gloss Frame</b>
+
+            <small>
+              EPIC • 500 COINS
+            </small>
+
+          </button>
+
+
+          <button class="style-item glass-card">
+
+            <span class="style-icon">◆</span>
+
+            <b>Night Frame</b>
+
+            <small>
+              COMMON • 250 COINS
+            </small>
+
+          </button>
+
+
+          <button class="style-item glass-card">
+
+            <span class="style-icon">Q</span>
+
+            <b>Queen Title</b>
+
+            <small>
+              LEGENDARY • 30 GEMS
+            </small>
+
           </button>
 
         </div>
@@ -168,321 +425,90 @@
       </section>
 
 
-      <section class="section">
+      <!-- PROFILE -->
+      <section id="profile" class="view">
 
-        <div class="section-heading">
-          <div>
-            <span class="eyebrow">PLAY</span>
-            <h2>Быстрые игры</h2>
+        <span class="eyebrow">YOUR SPACE</span>
+
+        <h2>Profile</h2>
+
+
+        <div class="profile-card glass-card">
+
+          <div id="profileAvatar" class="avatar profile-avatar">
+            ♙
           </div>
 
-          <button class="text-btn" data-view="games">
-            Все
-          </button>
-        </div>
+          <h3 id="profileName">
+            Queen
+          </h3>
+
+          <span class="profile-tag">
+            QUEEN • LVL 01
+          </span>
 
 
-        <div class="games-row">
+          <div class="stats">
 
-          <button class="game-card" data-game="flip">
-            <div class="game-symbol coin-symbol">◉</div>
-            <strong>Монетка</strong>
-            <small>Сделай выбор</small>
-          </button>
+            <div>
+              <b>0</b>
+              <small>CROWNS</small>
+            </div>
 
-          <button class="game-card" data-game="fortune">
-            <div class="game-symbol fortune-symbol">✧</div>
-            <strong>Fortune</strong>
-            <small>Испытай удачу</small>
-          </button>
+            <div>
+              <b>01</b>
+              <small>LEVEL</small>
+            </div>
 
-          <button class="game-card" data-game="upgrader">
-            <div class="game-symbol upgrade-symbol">↗</div>
-            <strong>Upgrader</strong>
-            <small>Прокачай награду</small>
-          </button>
+            <div>
+              <b>0</b>
+              <small>POSTS</small>
+            </div>
+
+          </div>
 
         </div>
 
       </section>
 
-    </main>
+    </div>
 
 
-    <!-- GAMES -->
-    <main id="gamesView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="page-heading">
-        <span class="eyebrow">PLAY</span>
-        <h1>Mini Games</h1>
-        <p>Выбирай игру и получай Coins.</p>
-      </div>
-
-      <div class="game-list">
-
-        <button class="large-game-card" data-game="flip">
-          <div class="large-game-icon">◉</div>
-          <div>
-            <strong>Монетка</strong>
-            <span>Орел или решка</span>
-          </div>
-          <b>›</b>
-        </button>
-
-        <button class="large-game-card" data-game="fortune">
-          <div class="large-game-icon">✧</div>
-          <div>
-            <strong>Fortune</strong>
-            <span>Случайная награда</span>
-          </div>
-          <b>›</b>
-        </button>
-
-        <button class="large-game-card" data-game="upgrader">
-          <div class="large-game-icon">↗</div>
-          <div>
-            <strong>Upgrader</strong>
-            <span>Попробуй улучшить награду</span>
-          </div>
-          <b>›</b>
-        </button>
-
-      </div>
-
-    </main>
-
-
-    <!-- FLIP -->
-    <main id="flipView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="page-heading">
-        <span class="eyebrow">MINI GAME</span>
-        <h1>Монетка</h1>
-        <p>Выбери сторону и сделай ставку.</p>
-      </div>
-
-      <div class="flip-card">
-
-        <div id="coinDisplay" class="big-coin">
-          <span>♛</span>
-        </div>
-
-        <div id="flipResult" class="result-text">
-          Выбери сторону
-        </div>
-
-        <div class="choice-row">
-          <button class="choice-btn" data-choice="heads">
-            Орел
-          </button>
-
-          <button class="choice-btn" data-choice="tails">
-            Решка
-          </button>
-        </div>
-
-        <div class="bet-title">Ставка</div>
-
-        <div class="bet-row">
-          <button class="bet-btn active" data-bet="10">10</button>
-          <button class="bet-btn" data-bet="25">25</button>
-          <button class="bet-btn" data-bet="50">50</button>
-        </div>
-
-        <button id="flipBtn" class="primary-btn">
-          Бросить монетку
-        </button>
-
-      </div>
-
-    </main>
-
-
-    <!-- PARTY -->
-    <main id="partyView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="page-heading">
-        <span class="eyebrow">SOCIAL</span>
-        <h1>Party</h1>
-        <p>Создавай свою компанию.</p>
-      </div>
-
-      <div class="empty-card">
-        <div class="empty-icon">◉</div>
-        <h3>Твоя Party</h3>
-        <p>
-          Здесь появятся участники, события
-          и совместные активности.
-        </p>
-        <button class="primary-btn small-btn">
-          Создать Party
-        </button>
-      </div>
-
-    </main>
-
-
-    <!-- FEED -->
-    <main id="feedView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="page-heading">
-        <span class="eyebrow">COMMUNITY</span>
-        <h1>Лента</h1>
-        <p>Твой мир. Твои люди.</p>
-      </div>
-
-      <div class="feed-card">
-        <div class="feed-placeholder">
-          <span>Q</span>
-        </div>
-
-        <h3>Queen Community</h3>
-        <p>
-          Здесь будут видео, события, обновления
-          и жизнь сообщества Queen.
-        </p>
-      </div>
-
-    </main>
-
-
-    <!-- STYLE -->
-    <main id="styleView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="page-heading">
-        <span class="eyebrow">PROFILE</span>
-        <h1>Style</h1>
-        <p>Сделай профиль своим.</p>
-      </div>
-
-      <div class="style-list">
-
-        <button class="style-item">
-          <span>▣</span>
-          <div>
-            <strong>Рамки</strong>
-            <small>Оформление аватара</small>
-          </div>
-          <b>›</b>
-        </button>
-
-        <button class="style-item">
-          <span>◇</span>
-          <div>
-            <strong>Тема профиля</strong>
-            <small>Цвета и оформление</small>
-          </div>
-          <b>›</b>
-        </button>
-
-        <button class="style-item">
-          <span>✦</span>
-          <div>
-            <strong>Титулы</strong>
-            <small>Покажи свой статус</small>
-          </div>
-          <b>›</b>
-        </button>
-
-        <button class="style-item">
-          <span>◌</span>
-          <div>
-            <strong>Эффекты</strong>
-            <small>Добавь стиль профилю</small>
-          </div>
-          <b>›</b>
-        </button>
-
-      </div>
-
-    </main>
-
-
-    <!-- PROFILE -->
-    <main id="profileView" class="view">
-
-      <button class="back-btn view-back">‹</button>
-
-      <div class="profile-header">
-
-        <div id="profileAvatar" class="profile-avatar">
-          <span>♛</span>
-        </div>
-
-        <h1 id="profileName">Queen</h1>
-
-        <p>
-          Level <span id="profileLevel">1</span>
-        </p>
-
-      </div>
-
-      <div class="stats-grid">
-
-        <div class="stat-card">
-          <span>♛</span>
-          <strong id="profileCrowns">0</strong>
-          <small>Crowns</small>
-        </div>
-
-        <div class="stat-card">
-          <span>◈</span>
-          <strong id="profileCoins">1500</strong>
-          <small>Coins</small>
-        </div>
-
-        <div class="stat-card">
-          <span>◆</span>
-          <strong id="profileGems">30</strong>
-          <small>Gems</small>
-        </div>
-
-      </div>
-
-    </main>
-
-
-    <!-- BOTTOM NAV -->
+    <!-- NAVIGATION -->
     <nav class="bottom-nav">
 
-      <button class="nav-item active" data-view="home">
-        <span>⌂</span>
-        <small>Home</small>
-      </button>
-
-      <button class="nav-item" data-view="games">
+      <button data-view="flip">
         <span>◉</span>
-        <small>Flip</small>
+        <small>FLIP</small>
       </button>
 
-      <button class="nav-center" data-view="home">
-        <span>♛</span>
+      <button data-view="party">
+        <span>◎</span>
+        <small>PARTY</small>
       </button>
 
-      <button class="nav-item" data-view="party">
-        <span>◉</span>
-        <small>Party</small>
+      <button class="games-btn" data-view="games">
+        <span>Q</span>
+        <small>GAMES</small>
       </button>
 
-      <button class="nav-item" data-view="profile">
+      <button data-view="style">
+        <span>▣</span>
+        <small>STYLE</small>
+      </button>
+
+      <button data-view="profile">
         <span>♙</span>
-        <small>Profile</small>
+        <small>PROFILE</small>
       </button>
 
     </nav>
 
   </section>
+
 </main>
-<script src="./app.js?v=999"></script>
+
+<script src="./app.js?v=1001"></script>
+
 </body>
 </html>
