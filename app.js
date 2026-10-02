@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* =========================================
+     TELEGRAM
+  ========================================== */
+
   const tg = window.Telegram?.WebApp;
 
   if (tg) {
@@ -13,6 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  /* =========================================
+     HELPERS
+  ========================================== */
+
   const $ = (selector) =>
     document.querySelector(selector);
 
@@ -20,41 +28,110 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(selector);
 
 
-  const onboarding = $("#onboarding");
+  /* =========================================
+     AUTH ELEMENTS
+  ========================================== */
+
+  const auth = $("#auth");
+
+  const loginScreen = $("#loginScreen");
+  const registerScreen = $("#registerScreen");
+
+  const loginBtn = $("#loginBtn");
+  const createAccountBtn = $("#createAccountBtn");
+  const backToLogin = $("#backToLogin");
+
+  const startBtn = $("#start");
+
+  const loginError = $("#loginError");
+  const registerError = $("#error");
+
   const shell = $("#shell");
 
-  const views = $$(".view");
-  const nav = $$(".bottom-nav [data-view]");
 
-  const nick = $("#nickname");
-  const file = $("#avatarInput");
-  const preview = $("#avatarPreview");
-  const error = $("#error");
+  /* =========================================
+     APP ELEMENTS
+  ========================================== */
+
+  const views = $$(".view");
+  const navButtons = $$(".bottom-nav [data-view]");
+
+  const nickname = $("#nickname");
+  const avatarInput = $("#avatarInput");
+  const avatarPreview = $("#avatarPreview");
 
   let avatar = "";
   let selectedChoice = "";
   let stake = 50;
 
 
-  /* =========================
-     NAVIGATION
-  ========================= */
+  /* =========================================
+     AUTH SCREENS
+  ========================================== */
 
-  function show(id) {
+  function showLogin() {
+
+    loginScreen?.classList.add("active");
+    registerScreen?.classList.remove("active");
+
+    loginError.textContent = "";
+    registerError.textContent = "";
+  }
+
+
+  function showRegister() {
+
+    loginScreen?.classList.remove("active");
+    registerScreen?.classList.add("active");
+
+    loginError.textContent = "";
+    registerError.textContent = "";
+
+    setTimeout(() => {
+      nickname?.focus();
+    }, 100);
+  }
+
+
+  function openApp() {
+
+    auth?.classList.remove("active");
+    shell?.classList.add("active");
+
+    showView("home");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant"
+    });
+  }
+
+
+  /* =========================================
+     VIEWS
+  ========================================== */
+
+  function showView(id) {
 
     views.forEach((view) => {
+
       view.classList.toggle(
         "active",
         view.id === id
       );
+
     });
 
-    nav.forEach((button) => {
+
+    navButtons.forEach((button) => {
+
       button.classList.toggle(
         "active",
         button.dataset.view === id
       );
+
     });
+
 
     window.scrollTo({
       top: 0,
@@ -63,27 +140,40 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  nav.forEach((button) => {
+  navButtons.forEach((button) => {
 
     button.addEventListener(
       "click",
       () => {
-        show(button.dataset.view);
+
+        showView(
+          button.dataset.view
+        );
+
       }
     );
 
   });
 
 
-  /* =========================
+  /* =========================================
      AVATAR
-  ========================= */
+  ========================================== */
 
   function setAvatar(element, src) {
 
-    if (!element || !src) return;
+    if (!element) return;
+
+    if (!src) {
+
+      element.innerHTML = "♙";
+
+      return;
+    }
+
 
     element.innerHTML = "";
+
 
     const img =
       document.createElement("img");
@@ -91,111 +181,138 @@ document.addEventListener("DOMContentLoaded", () => {
     img.src = src;
     img.alt = "Аватар";
 
+
     element.appendChild(img);
   }
 
 
   function compressAvatar(file) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(
+      (resolve, reject) => {
 
-      const reader =
-        new FileReader();
-
-      reader.onload = () => {
-
-        const image =
-          new Image();
-
-        image.onload = () => {
-
-          const canvas =
-            document.createElement("canvas");
-
-          const maxSize = 600;
-
-          let width = image.width;
-          let height = image.height;
+        const reader =
+          new FileReader();
 
 
-          if (width > height) {
+        reader.onload = () => {
 
-            if (width > maxSize) {
+          const image =
+            new Image();
 
-              height =
-                height * maxSize / width;
 
-              width = maxSize;
+          image.onload = () => {
+
+            const canvas =
+              document.createElement(
+                "canvas"
+              );
+
+
+            const maxSize = 600;
+
+            let width =
+              image.width;
+
+            let height =
+              image.height;
+
+
+            if (width > height) {
+
+              if (width > maxSize) {
+
+                height =
+                  height *
+                  maxSize /
+                  width;
+
+                width =
+                  maxSize;
+              }
+
+            } else {
+
+              if (height > maxSize) {
+
+                width =
+                  width *
+                  maxSize /
+                  height;
+
+                height =
+                  maxSize;
+              }
+
             }
 
-          } else {
 
-            if (height > maxSize) {
+            canvas.width =
+              width;
 
-              width =
-                width * maxSize / height;
-
-              height = maxSize;
-            }
-          }
+            canvas.height =
+              height;
 
 
-          canvas.width = width;
-          canvas.height = height;
+            const ctx =
+              canvas.getContext(
+                "2d"
+              );
 
 
-          const ctx =
-            canvas.getContext("2d");
+            ctx.drawImage(
+              image,
+              0,
+              0,
+              width,
+              height
+            );
 
 
-          ctx.drawImage(
-            image,
-            0,
-            0,
-            width,
-            height
-          );
+            resolve(
+              canvas.toDataURL(
+                "image/jpeg",
+                0.82
+              )
+            );
+
+          };
 
 
-          resolve(
-            canvas.toDataURL(
-              "image/jpeg",
-              0.82
-            )
-          );
+          image.onerror = reject;
 
+          image.src =
+            reader.result;
         };
 
 
-        image.onerror = reject;
+        reader.onerror = reject;
 
-        image.src = reader.result;
-      };
+        reader.readAsDataURL(file);
 
-
-      reader.onerror = reject;
-
-      reader.readAsDataURL(file);
-    });
-
+      }
+    );
   }
 
 
-  file?.addEventListener(
+  avatarInput?.addEventListener(
     "change",
     async (event) => {
 
-      const selectedFile =
+      const file =
         event.target.files?.[0];
 
-      if (!selectedFile) return;
+
+      if (!file) return;
 
 
       if (
-        !selectedFile.type.startsWith("image/")
+        !file.type.startsWith(
+          "image/"
+        )
       ) {
 
-        error.textContent =
+        registerError.textContent =
           "Выбери изображение.";
 
         return;
@@ -203,11 +320,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
       if (
-        selectedFile.size >
+        file.size >
         12 * 1024 * 1024
       ) {
 
-        error.textContent =
+        registerError.textContent =
           "Фото должно быть меньше 12 МБ.";
 
         return;
@@ -216,27 +333,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
 
-        error.textContent =
+        registerError.textContent =
           "Загрузка фото...";
 
 
         avatar =
           await compressAvatar(
-            selectedFile
+            file
           );
 
 
         setAvatar(
-          preview,
+          avatarPreview,
           avatar
         );
 
 
-        error.textContent = "";
+        registerError.textContent =
+          "";
 
-      } catch (e) {
+      } catch (error) {
 
-        error.textContent =
+        registerError.textContent =
           "Не удалось загрузить фото.";
 
       }
@@ -245,19 +363,35 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* =========================
+  /* =========================================
      APPLY USER
-  ========================= */
+  ========================================== */
 
-  function applyUser(name, avatarSrc) {
+  function applyUser(
+    name,
+    avatarSrc
+  ) {
 
     if (name) {
 
-      $("#name").textContent =
-        name;
+      const nameElement =
+        $("#name");
 
-      $("#profileName").textContent =
-        name;
+      const profileName =
+        $("#profileName");
+
+
+      if (nameElement) {
+        nameElement.textContent =
+          name;
+      }
+
+
+      if (profileName) {
+        profileName.textContent =
+          name;
+      }
+
     }
 
 
@@ -268,56 +402,72 @@ document.addEventListener("DOMContentLoaded", () => {
         avatarSrc
       );
 
+
       setAvatar(
         $("#profileAvatar"),
         avatarSrc
       );
+
     }
 
   }
 
 
-  /* =========================
-     ENTER QUEEN
-  ========================= */
+  /* =========================================
+     CREATE ACCOUNT
+  ========================================== */
 
-  function enterQueen() {
-
-    onboarding.classList.remove(
-      "active"
-    );
-
-    shell.classList.add(
-      "active"
-    );
-
-    show("home");
-
-    window.scrollTo({
-      top: 0,
-      behavior: "instant"
-    });
-  }
-
-
-  $("#start")?.addEventListener(
+  createAccountBtn?.addEventListener(
     "click",
     () => {
 
+      showRegister();
+
+    }
+  );
+
+
+  backToLogin?.addEventListener(
+    "click",
+    () => {
+
+      showLogin();
+
+    }
+  );
+
+
+  startBtn?.addEventListener(
+    "click",
+    async () => {
+
       const name =
-        nick.value.trim();
+        nickname.value.trim();
 
 
       if (name.length < 2) {
 
-        error.textContent =
+        registerError.textContent =
           "Введи ник минимум из 2 символов.";
 
-        nick.focus();
+        nickname.focus();
 
         return;
       }
 
+
+      if (name.length > 20) {
+
+        registerError.textContent =
+          "Ник должен быть не длиннее 20 символов.";
+
+        nickname.focus();
+
+        return;
+      }
+
+
+      /* сохраняем аккаунт */
 
       localStorage.setItem(
         "queen_username",
@@ -352,110 +502,62 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
 
-      enterQueen();
+      /* после регистрации сразу в приложение */
+
+      openApp();
 
     }
   );
 
 
-  /* =========================
-     AUTO LOGIN
-  ========================= */
+  /* =========================================
+     LOGIN
+  ========================================== */
 
-  const savedName =
-    localStorage.getItem(
-      "queen_username"
-    );
+  loginBtn?.addEventListener(
+    "click",
+    () => {
 
-
-  const savedAvatar =
-    localStorage.getItem(
-      "queen_avatar"
-    );
+      const savedName =
+        localStorage.getItem(
+          "queen_username"
+        );
 
 
-  if (savedName) {
-
-    nick.value =
-      savedName;
-
-    avatar =
-      savedAvatar || "";
-
-    applyUser(
-      savedName,
-      savedAvatar
-    );
+      const savedAvatar =
+        localStorage.getItem(
+          "queen_avatar"
+        );
 
 
-    /*
-      Если пользователь уже зарегистрирован,
-      регистрационный экран вообще не показываем.
-    */
+      if (!savedName) {
 
-    onboarding.classList.remove(
-      "active"
-    );
+        loginError.textContent =
+          "Аккаунт не найден. Сначала создай аккаунт.";
 
-    shell.classList.add(
-      "active"
-    );
-
-    show("home");
-
-  } else {
-
-    /*
-      Новый пользователь видит только регистрацию.
-    */
-
-    onboarding.classList.add(
-      "active"
-    );
-
-    shell.classList.remove(
-      "active"
-    );
-
-  }
+        return;
+      }
 
 
-  /* =========================
-     FLIP
-  ========================= */
-
-  $$(".choice").forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          selectedChoice =
-            button.dataset.choice;
+      avatar =
+        savedAvatar || "";
 
 
-          $$(".choice").forEach(
-            (item) => {
-
-              item.classList.remove(
-                "selected"
-              );
-
-            }
-          );
-
-
-          button.classList.add(
-            "selected"
-          );
-
-        }
+      applyUser(
+        savedName,
+        savedAvatar
       );
 
+
+      openApp();
+
     }
   );
 
+
+  /* =========================================
+     FLIP
+  ========================================== */
 
   $$("[data-stake]").forEach(
     (button) => {
@@ -541,66 +643,110 @@ document.addEventListener("DOMContentLoaded", () => {
         "rotateY(720deg)";
 
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        coin.style.transform =
-          "rotateY(0deg)";
-
-
-        if (
-          outcome === selectedChoice
-        ) {
-
-          coins += stake;
-
-          result.textContent =
-            `Выпало: ${
-              outcome === "heads"
-                ? "Орёл"
-                : "Решка"
-            } • +${stake} Coins`;
-
-        } else {
-
-          coins -= stake;
-
-          result.textContent =
-            `Выпало: ${
-              outcome === "heads"
-                ? "Орёл"
-                : "Решка"
-            } • −${stake} Coins`;
-
-        }
+          coin.style.transform =
+            "rotateY(0deg)";
 
 
-        coinsElement.textContent =
-          coins.toLocaleString("ru-RU");
+          if (
+            outcome ===
+            selectedChoice
+          ) {
+
+            coins += stake;
+
+            result.textContent =
+              `Выпало: ${
+                outcome === "heads"
+                  ? "Орёл"
+                  : "Решка"
+              } • +${stake} Coins`;
+
+          } else {
+
+            coins -= stake;
+
+            result.textContent =
+              `Выпало: ${
+                outcome === "heads"
+                  ? "Орёл"
+                  : "Решка"
+              } • −${stake} Coins`;
+
+          }
 
 
-        /*
-          Обновляем Coins и в профиле.
-        */
+          const formatted =
+            coins.toLocaleString(
+              "ru-RU"
+            );
 
-        const profileCoins =
-          $("#profileCoins");
 
-        if (profileCoins) {
+          coinsElement.textContent =
+            formatted;
 
-          profileCoins.textContent =
-            coins.toLocaleString("ru-RU");
 
-        }
+          const profileCoins =
+            $("#profileCoins");
 
-      }, 450);
+
+          if (profileCoins) {
+
+            profileCoins.textContent =
+              formatted;
+
+          }
+
+        },
+        450
+      );
 
     }
   );
 
 
-  /* =========================
-     MINI GAMES
-  ========================= */
+  /* =========================================
+     FLIP CHOICES
+  ========================================== */
+
+  $$(".choice").forEach(
+    (button) => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          selectedChoice =
+            button.dataset.choice;
+
+
+          $$(".choice").forEach(
+            (item) => {
+
+              item.classList.remove(
+                "selected"
+              );
+
+            }
+          );
+
+
+          button.classList.add(
+            "selected"
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /* =========================================
+     OPEN OTHER VIEWS
+  ========================================== */
 
   $$("[data-open]").forEach(
     (button) => {
@@ -609,7 +755,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "click",
         () => {
 
-          show(
+          showView(
             button.dataset.open
           );
 
@@ -620,6 +766,10 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
+  /* =========================================
+     MINI GAMES
+  ========================================== */
+
   $$("[data-mode]").forEach(
     (button) => {
 
@@ -629,6 +779,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const notice =
             $("#gameNotice");
+
+
+          if (!notice) return;
 
 
           if (
@@ -659,9 +812,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* =========================
+  /* =========================================
      STYLE
-  ========================= */
+  ========================================== */
 
   $$(".style-item").forEach(
     (button) => {
@@ -692,27 +845,81 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* =========================
+  /* =========================================
      PARTY
-  ========================= */
+  ========================================== */
 
-  $(".secondary-btn")?.addEventListener(
-    "click",
-    (event) => {
+  $$("#party .secondary-btn").forEach(
+    (button) => {
 
-      event.currentTarget.textContent =
-        "Party скоро будет доступна";
+      button.addEventListener(
+        "click",
+        () => {
+
+          button.textContent =
+            "Party скоро будет доступна";
+
+        }
+      );
 
     }
   );
 
 
-  /* =========================
-     START
-  ========================= */
+  /* =========================================
+     IMPORTANT:
+     ALWAYS START ON LOGIN
+  ========================================== */
+
+  if (auth) {
+    auth.classList.add("active");
+  }
+
+
+  if (shell) {
+    shell.classList.remove("active");
+  }
+
+
+  if (loginScreen) {
+    loginScreen.classList.add("active");
+  }
+
+
+  if (registerScreen) {
+    registerScreen.classList.remove("active");
+  }
+
+
+  /* =========================================
+     LOAD SAVED USER FOR LOGIN
+     BUT DO NOT ENTER APP AUTOMATICALLY
+  ========================================== */
+
+  const savedName =
+    localStorage.getItem(
+      "queen_username"
+    );
+
+
+  const savedAvatar =
+    localStorage.getItem(
+      "queen_avatar"
+    );
+
 
   if (savedName) {
-    show("home");
+
+    avatar =
+      savedAvatar || "";
+
+    /*
+      ВАЖНО:
+      Здесь мы НЕ вызываем openApp().
+      Пользователь должен сам нажать
+      "Войти в Queen".
+    */
+
   }
 
 });
