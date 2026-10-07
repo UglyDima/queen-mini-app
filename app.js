@@ -1,155 +1,172 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* ==================== TELEGRAM ==================== */
+
   const tg = window.Telegram?.WebApp;
 
   if (tg) {
-    tg.ready();
-    tg.expand();
-
     try {
-      tg.setHeaderColor("#080808");
-      tg.setBackgroundColor("#080808");
-    } catch (e) {}
+      tg.ready();
+      tg.expand();
+
+      tg.setHeaderColor("#070707");
+      tg.setBackgroundColor("#070707");
+
+      if (tg.disableVerticalSwipes) {
+        tg.disableVerticalSwipes();
+      }
+    } catch (error) {
+      console.warn("Telegram WebApp setup:", error);
+    }
   }
 
 
-  const $ = (selector) =>
-    document.querySelector(selector);
+  /* ==================== HELPERS ==================== */
 
-  const $$ = (selector) =>
-    document.querySelectorAll(selector);
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => document.querySelectorAll(selector);
 
+
+  /* ==================== ELEMENTS ==================== */
 
   const auth = $("#auth");
+  const shell = $("#shell");
+
   const loginBtn = $("#loginBtn");
   const loginError = $("#loginError");
-  const shell = $("#shell");
 
   const views = $$(".view");
   const navButtons = $$(".bottom-nav [data-view]");
 
+
+  /* ==================== STATE ==================== */
+
   let selectedChoice = "";
   let stake = 50;
 
-
-  /* =========================
-     OPEN APP
-  ========================== */
-
-  function enterQueen() {
-
-    const savedName =
-      localStorage.getItem("queen_username");
-
-    const savedAvatar =
-      localStorage.getItem("queen_avatar");
+  let coins = 1500;
+  let gems = 30;
+  let crowns = 0;
+  let level = 1;
 
 
-    if (!savedName) {
+  /* ==================== PROFILE ==================== */
 
-      loginError.textContent =
-        "Профиль ещё не создан.";
+  function getSavedProfile() {
+    const username = localStorage.getItem("queen_username");
+    const avatar = localStorage.getItem("queen_avatar");
 
-      return;
-    }
-
-
-    $("#profileName").textContent =
-      savedName;
-
-
-    setAvatar(
-      $("#profileAvatar"),
-      savedAvatar
-    );
-
-
-    auth.classList.remove("active");
-    shell.classList.add("active");
-
-
-    showView("profile");
+    return {
+      username: username ? username.trim() : "",
+      avatar: avatar || ""
+    };
   }
 
 
-  /* =========================
-     LOGIN
-  ========================== */
-
-  loginBtn?.addEventListener(
-    "click",
-    () => {
-
-      loginError.textContent = "";
-
-      enterQueen();
-
-    }
-  );
-
-
-  /* =========================
-     AVATAR
-  ========================== */
-
   function setAvatar(element, src) {
-
     if (!element) return;
-
-
-    if (!src) {
-
-      element.innerHTML = "♙";
-
-      return;
-    }
-
 
     element.innerHTML = "";
 
+    if (!src) {
+      element.textContent = "♙";
+      return;
+    }
 
-    const img =
-      document.createElement("img");
-
+    const img = document.createElement("img");
 
     img.src = src;
     img.alt = "Аватар";
 
+    img.onload = () => {
+      element.innerHTML = "";
+      element.appendChild(img);
+    };
 
-    img.style.width = "100%";
-    img.style.height = "100%";
-    img.style.display = "block";
-    img.style.objectFit = "cover";
-    img.style.objectPosition = "center";
+    img.onerror = () => {
+      element.textContent = "♙";
+    };
 
+    element.style.overflow = "hidden";
 
     element.appendChild(img);
   }
 
 
-  /* =========================
-     NAVIGATION
-  ========================== */
+  function loadProfile() {
+    const profile = getSavedProfile();
+
+    if (!profile.username) {
+      return false;
+    }
+
+    $("#profileName").textContent = profile.username;
+
+    setAvatar(
+      $("#profileAvatar"),
+      profile.avatar
+    );
+
+    $("#profileCrowns").textContent = crowns;
+    $("#profileLevel").textContent =
+      String(level).padStart(2, "0");
+
+    $("#profileCoins").textContent =
+      coins.toLocaleString("ru-RU");
+
+    $("#profileGems").textContent =
+      gems.toLocaleString("ru-RU");
+
+    return true;
+  }
+
+
+  /* ==================== LOGIN ==================== */
+
+  function enterQueen() {
+
+    loginError.textContent = "";
+
+    const profileExists = loadProfile();
+
+    if (!profileExists) {
+      loginError.textContent =
+        "Аккаунт Queen не найден.";
+      return;
+    }
+
+    auth.classList.remove("active");
+    shell.classList.add("active");
+
+    showView("profile");
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant"
+    });
+  }
+
+
+  loginBtn?.addEventListener("click", enterQueen);
+
+
+  /* ==================== NAVIGATION ==================== */
 
   function showView(id) {
 
     views.forEach((view) => {
-
       view.classList.toggle(
         "active",
         view.id === id
       );
-
     });
 
 
     navButtons.forEach((button) => {
-
       button.classList.toggle(
         "active",
         button.dataset.view === id
       );
-
     });
 
 
@@ -162,295 +179,191 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navButtons.forEach((button) => {
 
-    button.addEventListener(
-      "click",
-      () => {
+    button.addEventListener("click", () => {
 
-        showView(
-          button.dataset.view
-        );
+      const target = button.dataset.view;
 
-      }
-    );
+      if (!target) return;
+
+      showView(target);
+
+    });
 
   });
 
 
-  /* =========================
-     FLIP CHOICE
-  ========================== */
+  /* ==================== FLIP CHOICE ==================== */
 
   $$(".choice").forEach((button) => {
 
-    button.addEventListener(
-      "click",
-      () => {
+    button.addEventListener("click", () => {
 
-        selectedChoice =
-          button.dataset.choice;
+      selectedChoice = button.dataset.choice || "";
 
+      $$(".choice").forEach((item) => {
+        item.classList.remove("selected");
+      });
 
-        $$(".choice").forEach(
-          (item) => {
+      button.classList.add("selected");
 
-            item.classList.remove(
-              "selected"
-            );
-
-          }
-        );
-
-
-        button.classList.add(
-          "selected"
-        );
-
-      }
-    );
+    });
 
   });
 
 
-  /* =========================
-     STAKE
-  ========================== */
+  /* ==================== STAKE ==================== */
 
-  $$("[data-stake]").forEach(
-    (button) => {
+  $$("[data-stake]").forEach((button) => {
 
-      button.addEventListener(
-        "click",
-        () => {
+    button.addEventListener("click", () => {
 
-          stake =
-            Number(
-              button.dataset.stake
-            );
+      stake = Number(button.dataset.stake);
 
+      if (!Number.isFinite(stake)) {
+        stake = 50;
+      }
 
-          $$("[data-stake]").forEach(
-            (item) => {
+      $$("[data-stake]").forEach((item) => {
+        item.classList.remove("selected");
+      });
 
-              item.classList.remove(
-                "selected"
-              );
+      button.classList.add("selected");
 
-            }
-          );
+    });
+
+  });
 
 
-          button.classList.add(
-            "selected"
-          );
+  /* ==================== FLIP GAME ==================== */
 
-        }
-      );
+  $("#flipPlay")?.addEventListener("click", () => {
 
+    const result = $("#flipResult");
+    const coin = $("#coin");
+
+    if (!selectedChoice) {
+      result.textContent =
+        "Сначала выбери Орёл или Решка.";
+      return;
     }
-  );
 
 
-  /* =========================
-     FLIP GAME
-  ========================== */
-
-  $("#flipPlay")?.addEventListener(
-    "click",
-    () => {
-
-      const result =
-        $("#flipResult");
-
-      const coin =
-        $("#coin");
-
-      const coinsElement =
-        $("#profileCoins");
+    if (coins < stake) {
+      result.textContent =
+        "Недостаточно Coins.";
+      return;
+    }
 
 
-      if (!selectedChoice) {
-
-        result.textContent =
-          "Сначала выбери Орёл или Решка.";
-
-        return;
-      }
+    const outcome =
+      Math.random() < 0.5
+        ? "heads"
+        : "tails";
 
 
-      let coins =
-        Number(
-          (coinsElement.textContent || "1500")
-            .replace(/\s/g, "")
-        );
+    coin.style.transform =
+      "rotateY(720deg)";
 
 
-      if (coins < stake) {
-
-        result.textContent =
-          "Недостаточно Coins.";
-
-        return;
-      }
-
-
-      const outcome =
-        Math.random() < 0.5
-          ? "heads"
-          : "tails";
-
+    setTimeout(() => {
 
       coin.style.transform =
-        "rotateY(720deg)";
+        "rotateY(0deg)";
 
 
-      setTimeout(() => {
-
-        coin.style.transform =
-          "rotateY(0deg)";
-
-
-        if (
-          outcome === selectedChoice
-        ) {
-
-          coins += stake;
-
-          result.textContent =
-            `Выпало: ${
-              outcome === "heads"
-                ? "Орёл"
-                : "Решка"
-            } • +${stake} Coins`;
-
-        } else {
-
-          coins -= stake;
-
-          result.textContent =
-            `Выпало: ${
-              outcome === "heads"
-                ? "Орёл"
-                : "Решка"
-            } • −${stake} Coins`;
-
-        }
+      const outcomeName =
+        outcome === "heads"
+          ? "Орёл"
+          : "Решка";
 
 
-        coinsElement.textContent =
-          coins.toLocaleString(
-            "ru-RU"
-          );
+      if (outcome === selectedChoice) {
 
-      }, 450);
+        coins += stake;
 
-    }
-  );
+        result.textContent =
+          `Выпало: ${outcomeName} • +${stake} Coins`;
 
+      } else {
 
-  /* =========================
-     OPEN GAME
-  ========================== */
+        coins -= stake;
 
-  $$("[data-open]").forEach(
-    (button) => {
+        result.textContent =
+          `Выпало: ${outcomeName} • −${stake} Coins`;
 
-      button.addEventListener(
-        "click",
-        () => {
-
-          showView(
-            button.dataset.open
-          );
-
-        }
-      );
-
-    }
-  );
+      }
 
 
-  /* =========================
-     GAME NOTICES
-  ========================== */
+      $("#profileCoins").textContent =
+        coins.toLocaleString("ru-RU");
 
-  $$("[data-mode]").forEach(
-    (button) => {
+    }, 450);
 
-      button.addEventListener(
-        "click",
-        () => {
-
-          const notice =
-            $("#gameNotice");
+  });
 
 
-          if (!notice) return;
+  /* ==================== GAME LINKS ==================== */
+
+  $$("[data-open]").forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+      const target = button.dataset.open;
+
+      if (!target) return;
+
+      showView(target);
+
+    });
+
+  });
 
 
-          if (
-            button.dataset.mode ===
-            "fortune"
-          ) {
+  /* ==================== COMING SOON GAMES ==================== */
 
-            notice.textContent =
-              "Fortune скоро будет доступна.";
+  $$("[data-mode]").forEach((button) => {
 
-          }
+    button.addEventListener("click", () => {
 
+      const notice = $("#gameNotice");
 
-          if (
-            button.dataset.mode ===
-            "upgrader"
-          ) {
-
-            notice.textContent =
-              "Upgrader скоро будет доступен.";
-
-          }
-
-        }
-      );
-
-    }
-  );
+      if (!notice) return;
 
 
-  /* =========================
-     STYLE
-  ========================== */
-
-  $$(".style-item").forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          $$(".style-item").forEach(
-            (item) => {
-
-              item.classList.remove(
-                "selected"
-              );
-
-            }
-          );
+      if (button.dataset.mode === "fortune") {
+        notice.textContent =
+          "Fortune скоро будет доступна.";
+      }
 
 
-          button.classList.add(
-            "selected"
-          );
+      if (button.dataset.mode === "upgrader") {
+        notice.textContent =
+          "Upgrader скоро будет доступен.";
+      }
 
-        }
-      );
+    });
 
-    }
-  );
+  });
 
 
-  /* =========================
-     PARTY
-  ========================== */
+  /* ==================== STYLE ==================== */
+
+  $$(".style-item").forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+      $$(".style-item").forEach((item) => {
+        item.classList.remove("selected");
+      });
+
+      button.classList.add("selected");
+
+    });
+
+  });
+
+
+  /* ==================== PARTY ==================== */
 
   $("#party .secondary-btn")?.addEventListener(
     "click",
@@ -463,11 +376,18 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* =========================
-     START STATE
-  ========================== */
+  /* ==================== INITIAL STATE ==================== */
+
+  /*
+    ВАЖНО:
+    Queen всегда начинается с экрана входа.
+    Мы НЕ открываем профиль автоматически,
+    даже если queen_username уже сохранён.
+  */
 
   auth.classList.add("active");
   shell.classList.remove("active");
+
+  showView("profile");
 
 });
