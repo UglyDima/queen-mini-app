@@ -8,6 +8,8 @@
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
+  <meta name="theme-color" content="#080808">
+
   <title>Queen</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -25,30 +27,21 @@
 
 <body>
 
-  <!-- =========================
-       LOGIN
-  ========================== -->
+  <!-- ==================== LOGIN ==================== -->
 
   <section id="auth" class="screen active">
-
-    <div id="loginScreen" class="auth-screen active">
+    <div class="auth-screen">
 
       <div class="auth-brand">
         <div class="queen-logo">Queen</div>
-        <div class="queen-subtitle">
-          SOCIAL GAME
-        </div>
+        <div class="queen-subtitle">SOCIAL GAME</div>
       </div>
 
       <div class="auth-card glass-card">
 
-        <span class="eyebrow">
-          WELCOME BACK
-        </span>
+        <div class="auth-label">WELCOME BACK</div>
 
-        <h1>
-          Войти в Queen
-        </h1>
+        <h1>Войти в Queen</h1>
 
         <p class="auth-description">
           Твой мир уже ждёт тебя.
@@ -62,10 +55,7 @@
           Войти в Queen
         </button>
 
-        <div
-          id="loginError"
-          class="form-error"
-        ></div>
+        <div id="loginError" class="form-error"></div>
 
       </div>
 
@@ -74,82 +64,61 @@
       </div>
 
     </div>
-
   </section>
 
 
-  <!-- =========================
-       APP
-  ========================== -->
+  <!-- ==================== APP ==================== -->
 
   <section id="shell" class="screen">
 
     <main class="content">
 
+      <!-- ==================== PROFILE ==================== -->
 
-      <!-- PROFILE -->
+      <section id="profile" class="view active">
 
-      <section
-        id="profile"
-        class="view active"
-      >
-
-        <span class="eyebrow">
-          YOUR SPACE
-        </span>
-
-        <h2>
-          Profile
-        </h2>
-
+        <div class="page-heading">
+          <span class="eyebrow">YOUR SPACE</span>
+          <h2>Profile</h2>
+        </div>
 
         <div class="profile-card glass-card">
 
-          <div
-            id="profileAvatar"
-            class="avatar profile-avatar"
-          >
-            ♙
+          <div class="profile-top">
+
+            <div
+              id="profileAvatar"
+              class="avatar profile-avatar"
+              aria-label="Аватар"
+            >
+              ♙
+            </div>
+
+            <div class="profile-main">
+
+              <h3 id="profileName">Queen</h3>
+
+              <span class="profile-tag">
+                QUEEN • LVL 01
+              </span>
+
+            </div>
+
           </div>
-
-          <h3 id="profileName">
-            Queen
-          </h3>
-
-          <span class="profile-tag">
-            QUEEN • LVL 01
-          </span>
 
 
           <div class="profile-status">
 
             <div class="profile-stat">
-
-              <span>♛</span>
-
-              <small>
-                CROWNS
-              </small>
-
-              <b id="profileCrowns">
-                0
-              </b>
-
+              <span class="stat-icon crown-icon">♛</span>
+              <small>CROWNS</small>
+              <b id="profileCrowns">0</b>
             </div>
 
-
             <div class="profile-stat">
-
-              <span>✦</span>
-
-              <small>
-                LEVEL
-              </small>
-
-              <b id="profileLevel">
-                01
-              </b>
-
+              <span class="stat-icon">✦</span>
+              <small>LEVEL</small>
+              <b id="profileLevel">01</b>
             </div>
 
           </div>
@@ -159,14 +128,11 @@
 
             <div class="wallet-item">
 
-              <span>🪙</span>
+              <span class="wallet-icon">🪙</span>
 
               <div>
                 <small>COINS</small>
-
-                <b id="profileCoins">
-                  1 500
-                </b>
+                <b id="profileCoins">1 500</b>
               </div>
 
             </div>
@@ -174,14 +140,11 @@
 
             <div class="wallet-item">
 
-              <span>💎</span>
+              <span class="wallet-icon">💎</span>
 
               <div>
                 <small>GEMS</small>
-
-                <b id="profileGems">
-                  30
-                </b>
+                <b id="profileGems">30</b>
               </div>
 
             </div>
@@ -191,16 +154,13 @@
         </div>
 
 
-        <div class="profile-section-title">
+        <!-- COSMETICS -->
+
+        <div class="section-heading">
 
           <div>
-            <span class="eyebrow">
-              YOUR COSMETICS
-            </span>
-
-            <h3>
-              Установлено
-            </h3>
+            <span class="eyebrow">YOUR COSMETICS</span>
+            <h3>Установлено</h3>
           </div>
 
         </div>
@@ -215,19 +175,9 @@
             </div>
 
             <div class="equipped-info">
-
-              <b>
-                Pink Aura
-              </b>
-
-              <span>
-                Эффект профиля
-              </span>
-
-              <small>
-                RARE • EQUIPPED
-              </small>
-
+              <b>Pink Aura</b>
+              <span>Эффект профиля</span>
+              <small>RARE • EQUIPPED</small>
             </div>
 
             <div class="equipped-price">
@@ -244,19 +194,9 @@
             </div>
 
             <div class="equipped-info">
-
-              <b>
-                Gloss Frame
-              </b>
-
-              <span>
-                Рамка аватара
-              </span>
-
-              <small>
-                EPIC • 500 COINS
-              </small>
-
+              <b>Gloss Frame</b>
+              <span>Рамка аватара</span>
+              <small>EPIC • EQUIPPED</small>
             </div>
 
             <div class="equipped-price">
@@ -270,22 +210,19 @@
       </section>
 
 
-      <!-- FLIP -->
+      <!-- ==================== FLIP ==================== -->
 
-      <section
-        id="flip"
-        class="view"
-      >
+      <section id="flip" class="view">
 
-        <span class="eyebrow">
-          MINI GAME
-        </span>
-
-        <h2>Flip</h2>
+        <div class="page-heading">
+          <span class="eyebrow">MINI GAME</span>
+          <h2>Flip</h2>
+        </div>
 
         <p class="view-description">
           Выбери сторону монеты и рискни своими Coins.
         </p>
+
 
         <div class="flip-card glass-card">
 
@@ -296,6 +233,7 @@
           <div id="flipResult" class="game-result">
             Выбери сторону
           </div>
+
 
           <div class="choice-row">
 
@@ -317,13 +255,18 @@
 
           </div>
 
+
           <div class="stake-title">
             Ставка
           </div>
 
+
           <div class="stake-row">
 
-            <button data-stake="25" type="button">
+            <button
+              data-stake="25"
+              type="button"
+            >
               25
             </button>
 
@@ -335,15 +278,22 @@
               50
             </button>
 
-            <button data-stake="100" type="button">
+            <button
+              data-stake="100"
+              type="button"
+            >
               100
             </button>
 
-            <button data-stake="250" type="button">
+            <button
+              data-stake="250"
+              type="button"
+            >
               250
             </button>
 
           </div>
+
 
           <button
             id="flipPlay"
@@ -358,22 +308,19 @@
       </section>
 
 
-      <!-- PARTY -->
+      <!-- ==================== PARTY ==================== -->
 
-      <section
-        id="party"
-        class="view"
-      >
+      <section id="party" class="view">
 
-        <span class="eyebrow">
-          SOCIAL
-        </span>
-
-        <h2>Party</h2>
+        <div class="page-heading">
+          <span class="eyebrow">SOCIAL</span>
+          <h2>Party</h2>
+        </div>
 
         <p class="view-description">
           Общайся, создавай связи и собирай свою компанию.
         </p>
+
 
         <div class="party-card glass-card">
 
@@ -381,9 +328,7 @@
             👥
           </div>
 
-          <h3>
-            Party скоро
-          </h3>
+          <h3>Party скоро</h3>
 
           <p>
             Здесь появятся друзья, комнаты и социальные активности.
@@ -401,22 +346,19 @@
       </section>
 
 
-      <!-- STYLE -->
+      <!-- ==================== STYLE ==================== -->
 
-      <section
-        id="style"
-        class="view"
-      >
+      <section id="style" class="view">
 
-        <span class="eyebrow">
-          CUSTOMIZATION
-        </span>
-
-        <h2>Style</h2>
+        <div class="page-heading">
+          <span class="eyebrow">CUSTOMIZATION</span>
+          <h2>Style</h2>
+        </div>
 
         <p class="view-description">
           Собирай свой визуальный образ в Queen.
         </p>
+
 
         <div class="style-grid">
 
@@ -424,9 +366,11 @@
             class="style-item glass-card selected"
             type="button"
           >
-            <div class="style-preview">✦</div>
+            <div class="style-preview">
+              ✦
+            </div>
 
-            <div>
+            <div class="style-item-info">
               <b>Pink Aura</b>
               <span>💎 30</span>
             </div>
@@ -437,9 +381,11 @@
             class="style-item glass-card"
             type="button"
           >
-            <div class="style-preview">◇</div>
+            <div class="style-preview">
+              ◇
+            </div>
 
-            <div>
+            <div class="style-item-info">
               <b>Gloss Frame</b>
               <span>🪙 500</span>
             </div>
@@ -450,9 +396,11 @@
             class="style-item glass-card"
             type="button"
           >
-            <div class="style-preview">♛</div>
+            <div class="style-preview">
+              ♛
+            </div>
 
-            <div>
+            <div class="style-item-info">
               <b>Royal Crown</b>
               <span>💎 100</span>
             </div>
@@ -463,9 +411,11 @@
             class="style-item glass-card"
             type="button"
           >
-            <div class="style-preview">✧</div>
+            <div class="style-preview">
+              ✧
+            </div>
 
-            <div>
+            <div class="style-item-info">
               <b>Diamond Glow</b>
               <span>🪙 1 000</span>
             </div>
@@ -476,24 +426,19 @@
       </section>
 
 
-      <!-- GAMES -->
+      <!-- ==================== GAMES ==================== -->
 
-      <section
-        id="games"
-        class="view"
-      >
+      <section id="games" class="view">
 
-        <span class="eyebrow">
-          PLAY
-        </span>
-
-        <h2>
-          Mini Games
-        </h2>
+        <div class="page-heading">
+          <span class="eyebrow">PLAY</span>
+          <h2>Mini Games</h2>
+        </div>
 
         <p class="view-description">
           Небольшие игры внутри мира Queen.
         </p>
+
 
         <div class="games-list">
 
@@ -564,17 +509,15 @@
 
         </div>
 
-        <div
-          id="gameNotice"
-          class="game-notice"
-        ></div>
+
+        <div id="gameNotice" class="game-notice"></div>
 
       </section>
 
     </main>
 
 
-    <!-- NAV -->
+    <!-- ==================== BOTTOM NAV ==================== -->
 
     <nav class="bottom-nav">
 
@@ -586,6 +529,7 @@
         <small>Flip</small>
       </button>
 
+
       <button
         data-view="party"
         type="button"
@@ -594,13 +538,16 @@
         <small>Party</small>
       </button>
 
+
       <button
         data-view="profile"
+        class="profile-nav"
         type="button"
       >
         <span>♛</span>
         <small>Profile</small>
       </button>
+
 
       <button
         data-view="style"
@@ -609,6 +556,7 @@
         <span>👗</span>
         <small>Style</small>
       </button>
+
 
       <button
         data-view="games"
