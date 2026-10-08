@@ -1,75 +1,81 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ==================== TELEGRAM ==================== */
+  /* ================= TELEGRAM ================= */
 
   const tg = window.Telegram?.WebApp;
 
   if (tg) {
+    tg.ready();
+    tg.expand();
+
     try {
-      tg.ready();
-      tg.expand();
-
-      tg.setHeaderColor("#070707");
-      tg.setBackgroundColor("#070707");
-
-      if (tg.disableVerticalSwipes) {
-        tg.disableVerticalSwipes();
-      }
-
-    } catch (error) {
-      console.warn("Telegram setup:", error);
-    }
+      tg.setHeaderColor("#070709");
+      tg.setBackgroundColor("#070709");
+    } catch (e) {}
   }
 
 
-  /* ==================== HELPERS ==================== */
+  /* ================= HELPERS ================= */
 
-  const $ = (selector) =>
-    document.querySelector(selector);
-
-  const $$ = (selector) =>
-    document.querySelectorAll(selector);
+  const $ = (selector) => document.querySelector(selector);
+  const $$ = (selector) => document.querySelectorAll(selector);
 
 
-  /* ==================== ELEMENTS ==================== */
+  /* ================= STATE ================= */
+
+  const state = {
+    xp: 120,
+
+    rating: 1000,
+    wins: 0,
+    losses: 0,
+    streak: 0,
+
+    fortuneSpinning: false,
+
+    upxRunning: false,
+    upxMultiplier: 1,
+    upxStopped: false,
+
+    battleActive: false,
+    battleDuration: 15 * 60,
+    battleStarted: 0,
+    battleTimer: null,
+    battleMyLikes: 0,
+    battleOpponentLikes: 0,
+
+    battleNumber: 24,
+
+    fighterLeft: {
+      name: "Luna",
+      likes: 124
+    },
+
+    fighterRight: {
+      name: "Mila",
+      likes: 119
+    },
+
+    ticBoard: Array(9).fill(""),
+    ticPlayer: "X",
+    ticGameOver: false,
+    ticDifficulty: "hard",
+
+    fruitScore: 0,
+    fruitTime: 30,
+    fruitRunning: false,
+    fruitTimer: null,
+    fruitGrid: [],
+    fruitPath: []
+  };
+
+
+  /* ================= LOGIN ================= */
 
   const auth = $("#auth");
   const shell = $("#shell");
-
   const loginBtn = $("#loginBtn");
   const loginError = $("#loginError");
-
-  const views = $$(".view");
-  const navButtons = $$(".bottom-nav [data-view]");
-
-
-  /* ==================== STATE ==================== */
-
-  let battleRating = 1000;
-
-  let battleWins = 0;
-  let battleLosses = 0;
-
-  let battleStreak = 0;
-  let battleVotes = 0;
-
-  let level = 1;
-  let crowns = 0;
-
-
-  /* ==================== PROFILE ==================== */
-
-  function getProfile() {
-
-    return {
-      username:
-        localStorage.getItem("queen_username")?.trim() || "",
-
-      avatar:
-        localStorage.getItem("queen_avatar") || ""
-    };
-
-  }
 
 
   function setAvatar(element, src) {
@@ -83,417 +89,740 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-
     const img = document.createElement("img");
 
     img.src = src;
     img.alt = "Аватар";
 
-
-    img.onload = () => {
-
-      element.innerHTML = "";
-
-      element.appendChild(img);
-
-    };
-
-
     img.onerror = () => {
-
-      element.innerHTML = "";
-
       element.textContent = "♙";
-
     };
-
 
     element.appendChild(img);
-
   }
 
-
-  function updateBattleStats() {
-
-    const total =
-      battleWins + battleLosses;
-
-
-    const winRate =
-      total > 0
-        ? Math.round(
-            (battleWins / total) * 100
-          )
-        : 0;
-
-
-    $("#battleRating").textContent =
-      battleRating.toLocaleString("ru-RU");
-
-
-    $("#battleWinRate").textContent =
-      `${winRate}%`;
-
-
-    $("#battleStreak").textContent =
-      battleStreak;
-
-
-    $("#battleVotes").textContent =
-      battleVotes.toLocaleString("ru-RU");
-
-
-    $("#profileBattleRating").textContent =
-      battleRating.toLocaleString("ru-RU");
-
-
-    $("#profileProfileWinRate").textContent =
-      `${winRate}%`;
-
-  }
-
-
-  function loadProfile() {
-
-    const profile = getProfile();
-
-
-    if (!profile.username) {
-      return false;
-    }
-
-
-    $("#profileName").textContent =
-      profile.username;
-
-
-    setAvatar(
-      $("#profileAvatar"),
-      profile.avatar
-    );
-
-
-    $("#profileCrowns").textContent =
-      crowns;
-
-
-    $("#profileLevel").textContent =
-      String(level).padStart(2, "0");
-
-
-    updateBattleStats();
-
-
-    return true;
-
-  }
-
-
-  /* ==================== LOGIN ==================== */
 
   function enterQueen() {
 
-    loginError.textContent = "";
+    const savedName = localStorage.getItem("queen_username");
+    const savedAvatar = localStorage.getItem("queen_avatar");
 
-
-    if (!loadProfile()) {
-
-      loginError.textContent =
-        "Аккаунт Queen не найден.";
-
+    if (!savedName) {
+      loginError.textContent = "Профиль ещё не создан.";
       return;
-
     }
 
+    $("#profileName").textContent = savedName;
+
+    setAvatar(
+      $("#profileAvatar"),
+      savedAvatar
+    );
+
+    setAvatar(
+      $("#leaderUserAvatar"),
+      savedAvatar
+    );
+
+    $("#leaderUserName").textContent = savedName;
 
     auth.classList.remove("active");
-
     shell.classList.add("active");
 
-
-    showView("battle");
-
-
-    window.scrollTo({
-      top: 0,
-      behavior: "instant"
-    });
-
+    showView("profile");
+    updateStats();
   }
 
 
-  loginBtn?.addEventListener(
-    "click",
-    enterQueen
-  );
+  loginBtn?.addEventListener("click", () => {
+
+    loginError.textContent = "";
+
+    enterQueen();
+
+  });
 
 
-  /* ==================== NAVIGATION ==================== */
+  /* ================= NAVIGATION ================= */
+
+  const views = $$(".view");
+  const navButtons = $$(".bottom-nav [data-view]");
+
 
   function showView(id) {
 
     views.forEach((view) => {
-
       view.classList.toggle(
         "active",
         view.id === id
       );
-
     });
 
-
     navButtons.forEach((button) => {
-
       button.classList.toggle(
         "active",
         button.dataset.view === id
       );
-
     });
-
 
     window.scrollTo({
       top: 0,
       behavior: "instant"
     });
-
   }
 
 
   navButtons.forEach((button) => {
 
-    button.addEventListener(
-      "click",
-      () => {
+    button.addEventListener("click", () => {
 
-        const target =
-          button.dataset.view;
+      showView(button.dataset.view);
 
-        if (!target) return;
-
-        showView(target);
-
-      }
-    );
+    });
 
   });
 
 
-  /* ==================== BATTLE VOTING ==================== */
+  /* ================= PROFILE STATS ================= */
 
-  $$(".vote-btn").forEach((button) => {
+  function updateStats() {
 
-    button.addEventListener(
-      "click",
-      () => {
+    $("#profileXP").textContent =
+      state.xp;
 
-        const choice =
-          button.dataset.vote;
+    $("#profileRating").textContent =
+      state.rating;
 
-        if (!choice) return;
+    $("#battleRating").textContent =
+      state.rating;
 
+    $("#profileWins").textContent =
+      state.wins;
 
-        $$(".vote-btn").forEach((item) => {
+    $("#battleWins").textContent =
+      state.wins;
 
-          item.classList.remove(
-            "selected"
+    $("#profileStreak").textContent =
+      state.streak;
+
+    $("#battleStreak").textContent =
+      state.streak;
+
+    const total =
+      state.wins + state.losses;
+
+    const rate =
+      total === 0
+        ? 0
+        : Math.round(
+            state.wins / total * 100
           );
 
-        });
+    $("#battleWinRate").textContent =
+      `${rate}%`;
+
+    $("#leaderUserRating").textContent =
+      `${state.rating} rating`;
+  }
 
 
-        button.classList.add(
-          "selected"
-        );
+  function addXP(amount) {
+
+    state.xp += amount;
+
+    updateStats();
+
+  }
 
 
-        battleVotes += 1;
+  /* ================= FORTUNE ================= */
+
+  const fortuneWheel = $("#fortuneWheel");
+  const fortuneSpin = $("#fortuneSpin");
+  const fortuneResult = $("#fortuneResult");
+
+  const fortuneRewards = [
+    {
+      text: "+100 XP",
+      xp: 100
+    },
+    {
+      text: "Pink Aura",
+      xp: 50
+    },
+    {
+      text: "Ничего ✦",
+      xp: 0
+    },
+    {
+      text: "+250 XP",
+      xp: 250
+    },
+    {
+      text: "Gloss Frame",
+      xp: 80
+    },
+    {
+      text: "Эффект ♛",
+      xp: 120
+    },
+    {
+      text: "Ничего",
+      xp: 0
+    },
+    {
+      text: "+50 XP",
+      xp: 50
+    }
+  ];
 
 
-        const result =
-          $("#voteResult");
+  let fortuneRotation = 0;
 
 
-        const name =
-          choice === "luna"
-            ? "Luna"
-            : "Mila";
+  fortuneSpin?.addEventListener("click", () => {
+
+    if (state.fortuneSpinning) {
+      return;
+    }
+
+    state.fortuneSpinning = true;
+
+    fortuneSpin.disabled = true;
+    fortuneSpin.style.opacity = ".55";
+
+    fortuneResult.textContent =
+      "Колесо вращается...";
 
 
-        result.textContent =
-          `Ты проголосовал за ${name} ❤️`;
+    const index =
+      Math.floor(
+        Math.random() *
+        fortuneRewards.length
+      );
+
+    const sector =
+      360 / fortuneRewards.length;
+
+    const target =
+      360 -
+      (index * sector + sector / 2);
+
+    fortuneRotation +=
+      360 * 6 + target;
+
+    fortuneWheel.style.transform =
+      `rotate(${fortuneRotation}deg)`;
 
 
-        updateBattleStats();
+    setTimeout(() => {
 
+      const reward =
+        fortuneRewards[index];
+
+      fortuneResult.textContent =
+        reward.text;
+
+      if (reward.xp > 0) {
+        addXP(reward.xp);
       }
-    );
+
+      state.fortuneSpinning = false;
+
+      fortuneSpin.disabled = false;
+      fortuneSpin.style.opacity = "1";
+
+    }, 3600);
 
   });
 
 
-  /* ==================== MOST LOVED ==================== */
+  /* ================= UP-X ================= */
 
-  $("#mostLovedBtn")?.addEventListener(
-    "click",
-    () => {
-
-      const block =
-        $("#mostLoved");
-
-      block.classList.toggle("hidden");
+  const upxStart = $("#upxStart");
+  const upxStop = $("#upxStop");
+  const upxMultiplier = $("#upxMultiplier");
+  const upxStatus = $("#upxStatus");
 
 
-      const visible =
-        !block.classList.contains(
-          "hidden"
-        );
+  let upxInterval = null;
+  let upxCrash = 0;
 
 
-      $("#mostLovedBtn").textContent =
-        visible
-          ? "× Hide Most Loved"
-          : "❤️ Most Loved";
+  function resetUpX() {
 
+    clearInterval(upxInterval);
+
+    state.upxRunning = false;
+
+    upxStart.classList.remove("hidden");
+    upxStop.classList.add("hidden");
+
+    upxStart.disabled = false;
+
+    upxStatus.textContent = "READY";
+    upxStatus.style.color = "var(--green)";
+
+  }
+
+
+  upxStart?.addEventListener("click", () => {
+
+    if (state.upxRunning) {
+      return;
     }
-  );
+
+    state.upxRunning = true;
+    state.upxMultiplier = 1;
+
+    upxCrash =
+      1.8 +
+      Math.random() * 7;
+
+    upxStart.classList.add("hidden");
+    upxStop.classList.remove("hidden");
+
+    upxStatus.textContent = "RISING";
+    upxStatus.style.color = "var(--pink-soft)";
+
+    upxInterval = setInterval(() => {
+
+      state.upxMultiplier +=
+        0.04 +
+        state.upxMultiplier * 0.006;
+
+      upxMultiplier.textContent =
+        `${state.upxMultiplier.toFixed(2)}×`;
 
 
-  /* ==================== STYLE ==================== */
+      if (
+        state.upxMultiplier >=
+        upxCrash
+      ) {
 
-  $$(".style-item").forEach((button) => {
+        clearInterval(upxInterval);
 
-    button.addEventListener(
-      "click",
-      () => {
+        state.upxRunning = false;
 
-        $$(".style-item").forEach(
-          (item) => {
+        upxStatus.textContent =
+          "STOPPED";
 
-            item.classList.remove(
-              "selected"
-            );
+        upxStatus.style.color =
+          "var(--danger)";
 
-          }
+        upxStart.classList.remove("hidden");
+        upxStop.classList.add("hidden");
+
+        addXP(
+          Math.max(
+            5,
+            Math.floor(
+              state.upxMultiplier * 10
+            )
+          )
         );
 
+        setTimeout(() => {
 
-        button.classList.add(
-          "selected"
-        );
+          upxMultiplier.textContent =
+            "1.00×";
+
+          resetUpX();
+
+        }, 1300);
 
       }
-    );
+
+    }, 80);
 
   });
 
 
-  /* ==================== PARTY ==================== */
+  upxStop?.addEventListener("click", () => {
 
-  $("#party .secondary-btn")?.addEventListener(
-    "click",
-    (event) => {
-
-      event.currentTarget.textContent =
-        "Party скоро будет доступна";
-
+    if (!state.upxRunning) {
+      return;
     }
-  );
+
+    clearInterval(upxInterval);
+
+    state.upxRunning = false;
+
+    const earned =
+      Math.floor(
+        state.upxMultiplier * 12
+      );
+
+    upxStatus.textContent =
+      `+${earned} XP`;
+
+    upxStatus.style.color =
+      "var(--green)";
+
+    addXP(earned);
+
+    upxStart.classList.remove("hidden");
+    upxStop.classList.add("hidden");
+
+  });
 
 
-  /* ==================== REAL PHOTO ==================== */
+  /* ================= BATTLE ================= */
 
-  $("#realPhotoBtn")?.addEventListener(
-    "click",
-    () => {
+  const battlePlay =
+    $("#battlePlay");
 
-      const notice =
-        $("#realPhotoBtn");
+  const activeBattle =
+    $("#activeBattle");
+
+  const battleTimer =
+    $("#battleTimer");
+
+  const battleProgress =
+    $("#battleProgress");
+
+  const myBattleLikes =
+    $("#myBattleLikes");
+
+  const opponentLikes =
+    $("#opponentLikes");
 
 
-      notice.textContent = "✓";
+  function formatTime(seconds) {
+
+    const min =
+      Math.floor(seconds / 60)
+        .toString()
+        .padStart(2, "0");
+
+    const sec =
+      Math.floor(seconds % 60)
+        .toString()
+        .padStart(2, "0");
+
+    return `${min}:${sec}`;
+  }
 
 
-      setTimeout(() => {
+  function startBattle() {
 
-        notice.textContent = "+";
-
-      }, 1600);
-
+    if (state.battleActive) {
+      return;
     }
-  );
+
+    state.battleActive = true;
+
+    state.battleDuration =
+      Math.random() < .5
+        ? 15 * 60
+        : 30 * 60;
+
+    state.battleStarted =
+      Date.now();
+
+    state.battleMyLikes =
+      Math.floor(
+        Math.random() * 15
+      );
+
+    state.battleOpponentLikes =
+      Math.floor(
+        Math.random() * 15
+      );
 
 
-  /* ==================== GAMES ==================== */
-
-  const gamePanel =
-    $("#gamePanel");
-
-  const gamePanelContent =
-    $("#gamePanelContent");
-
-  const gameNotice =
-    $("#gameNotice");
-
-
-  function openGame(game) {
-
-    gamePanel.classList.remove(
+    activeBattle.classList.remove(
       "hidden"
     );
 
+    battlePlay.textContent =
+      "BATTLE ACTIVE";
 
-    gameNotice.textContent = "";
+
+    updateBattleTimer();
+
+    state.battleTimer =
+      setInterval(
+        updateBattleTimer,
+        1000
+      );
+
+  }
 
 
-    if (game === "fortuna") {
-      renderFortuna();
+  function updateBattleTimer() {
+
+    if (!state.battleActive) {
+      return;
     }
 
+    const elapsed =
+      Math.floor(
+        (Date.now() -
+          state.battleStarted) / 1000
+      );
 
-    if (game === "upx") {
-      renderUpX();
-    }
+    const remaining =
+      Math.max(
+        0,
+        state.battleDuration -
+        elapsed
+      );
 
 
-    if (game === "ttt") {
-      renderTicTacToe();
-    }
+    battleTimer.textContent =
+      formatTime(remaining);
 
 
-    if (game === "fruit") {
-      renderFruitDrop();
+    const percent =
+      remaining /
+      state.battleDuration;
+
+    battleProgress.style.transform =
+      `scaleX(${percent})`;
+
+
+    myBattleLikes.textContent =
+      state.battleMyLikes;
+
+    opponentLikes.textContent =
+      state.battleOpponentLikes;
+
+
+    if (remaining <= 0) {
+
+      finishBattle();
+
     }
 
   }
 
 
-  function closeGame() {
+  function finishBattle() {
 
-    gamePanel.classList.add(
+    clearInterval(
+      state.battleTimer
+    );
+
+    state.battleActive = false;
+
+
+    const win =
+      state.battleMyLikes >=
+      state.battleOpponentLikes;
+
+
+    if (win) {
+
+      state.wins++;
+      state.streak++;
+
+      state.rating += 25;
+
+      addXP(150);
+
+      alert(
+        "♛ Победа!\n\n" +
+        `Ты набрал ${state.battleMyLikes} лайков.`
+      );
+
+    } else {
+
+      state.losses++;
+      state.streak = 0;
+
+      state.rating =
+        Math.max(
+          0,
+          state.rating - 15
+        );
+
+      addXP(50);
+
+      alert(
+        "Battle завершён.\n\n" +
+        "В этот раз победил соперник."
+      );
+
+    }
+
+
+    activeBattle.classList.add(
       "hidden"
     );
 
-    gamePanelContent.innerHTML = "";
+    battlePlay.textContent =
+      "PLAY";
+
+
+    updateStats();
 
   }
 
 
-  $("#closeGame")?.addEventListener(
+  battlePlay?.addEventListener(
     "click",
-    closeGame
+    startBattle
   );
 
 
-  $$("[data-game]").forEach(
+  $("#leaveBattle")?.addEventListener(
+    "click",
+    () => {
+
+      showView("profile");
+
+    }
+  );
+
+
+  /* ================= BATTLE VOTING ================= */
+
+  const left =
+    $("#fighterLeft");
+
+  const right =
+    $("#fighterRight");
+
+
+  function nextBattle() {
+
+    state.battleNumber++;
+
+    const names = [
+      ["Luna", "Mila"],
+      ["Aria", "Nika"],
+      ["Sofia", "Lina"],
+      ["Vera", "Maya"],
+      ["Ayla", "Kira"],
+      ["Emma", "Nora"]
+    ];
+
+    const pair =
+      names[
+        Math.floor(
+          Math.random() *
+          names.length
+        )
+      ];
+
+
+    $("#battleNumber").textContent =
+      `#${String(
+        state.battleNumber
+      ).padStart(3, "0")}`;
+
+
+    state.fighterLeft.name =
+      pair[0];
+
+    state.fighterRight.name =
+      pair[1];
+
+
+    state.fighterLeft.likes =
+      90 +
+      Math.floor(
+        Math.random() * 100
+      );
+
+    state.fighterRight.likes =
+      90 +
+      Math.floor(
+        Math.random() * 100
+      );
+
+
+    $("#fighterLeftName").textContent =
+      state.fighterLeft.name;
+
+    $("#fighterRightName").textContent =
+      state.fighterRight.name;
+
+
+    $("#fighterLeftLikes").textContent =
+      `${state.fighterLeft.likes} likes`;
+
+    $("#fighterRightLikes").textContent =
+      `${state.fighterRight.likes} likes`;
+
+
+    $("#battleVotes").textContent =
+      `${state.fighterLeft.likes} — ${state.fighterRight.likes}`;
+
+
+    $("#battleTheme").textContent =
+      [
+        "NIGHT GLAM",
+        "PINK FUTURE",
+        "OLD MONEY",
+        "CITY LIGHTS",
+        "SOFT POWER",
+        "ROYAL NIGHT"
+      ][
+        Math.floor(
+          Math.random() * 6
+        )
+      ];
+
+  }
+
+
+  function vote(side) {
+
+    const button =
+      side === "left"
+        ? left
+        : right;
+
+    button.classList.add(
+      "selected"
+    );
+
+
+    setTimeout(() => {
+
+      button.classList.remove(
+        "selected"
+      );
+
+      nextBattle();
+
+    }, 450);
+
+  }
+
+
+  left?.addEventListener(
+    "click",
+    () => vote("left")
+  );
+
+  right?.addEventListener(
+    "click",
+    () => vote("right")
+  );
+
+
+  /* ================= STYLE ================= */
+
+  $$(".style-item").forEach(
     (button) => {
 
       button.addEventListener(
         "click",
         () => {
 
-          openGame(
-            button.dataset.game
+          $$(".style-item")
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "selected"
+                )
+            );
+
+          button.classList.add(
+            "selected"
           );
 
         }
@@ -503,677 +832,871 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
 
-  /* ==================== FORTUNA ==================== */
+  /* ================= TIC TAC TOE ================= */
 
-  function renderFortuna() {
+  const ticBoard =
+    $("#ticBoard");
 
-    gamePanelContent.innerHTML = `
-
-      <div class="eyebrow">
-        DAILY GAME
-      </div>
-
-      <h3>🔮 Fortuna</h3>
-
-      <p>
-        Один бесплатный шанс каждый день.
-        Попробуй узнать свою награду.
-      </p>
-
-      <button
-        id="fortuneBtn"
-        class="primary-btn"
-        type="button"
-      >
-        Испытать удачу
-      </button>
-
-      <div
-        id="fortuneResult"
-        class="game-notice"
-      ></div>
-
-    `;
+  const ticStatus =
+    $("#ticStatus");
 
 
-    $("#fortuneBtn")?.addEventListener(
-      "click",
-      () => {
+  function resetTic() {
 
-        const rewards = [
-          "+25 XP",
-          "+50 XP",
-          "+75 XP",
-          "RARE предмет",
-          "LUCKY DAY ✦"
-        ];
+    state.ticBoard =
+      Array(9).fill("");
 
+    state.ticGameOver = false;
 
-        const reward =
-          rewards[
-            Math.floor(
-              Math.random() *
-              rewards.length
-            )
-          ];
+    ticStatus.textContent =
+      "Твой ход";
 
+    $$("#ticBoard button")
+      .forEach(
+        button => {
 
-        $("#fortuneResult").textContent =
-          `Твоя награда: ${reward}`;
+          button.textContent = "";
+          button.className = "";
 
-      }
-    );
+        }
+      );
 
   }
 
 
-  /* ==================== UP-X ==================== */
+  function renderTic() {
 
-  let upxTimer = null;
-  let upxRunning = false;
-  let upxValue = 1.00;
+    $$("#ticBoard button")
+      .forEach(
+        button => {
 
-
-  function renderUpX() {
-
-    gamePanelContent.innerHTML = `
-
-      <div class="eyebrow">
-        SKILL GAME
-      </div>
-
-      <h3>📈 Up-X</h3>
-
-      <p>
-        Множитель растёт. Останови его
-        вовремя и установи личный рекорд.
-      </p>
-
-      <div
-        id="upxValue"
-        class="upx-value"
-      >
-        1.00×
-      </div>
-
-      <button
-        id="upxButton"
-        class="primary-btn upx-start"
-        type="button"
-      >
-        START
-      </button>
-
-      <div
-        id="upxResult"
-        class="game-notice"
-      ></div>
-
-    `;
-
-
-    $("#upxButton")?.addEventListener(
-      "click",
-      handleUpX
-    );
-
-  }
-
-
-  function handleUpX() {
-
-    const button =
-      $("#upxButton");
-
-    const value =
-      $("#upxValue");
-
-    const result =
-      $("#upxResult");
-
-
-    if (!upxRunning) {
-
-      upxRunning = true;
-      upxValue = 1.00;
-
-      button.textContent =
-        "STOP";
-
-
-      result.textContent = "";
-
-
-      upxTimer =
-        setInterval(() => {
-
-          upxValue +=
-            0.01 +
-            Math.random() * 0.08;
-
-
-          value.textContent =
-            `${upxValue.toFixed(2)}×`;
-
-
-          if (upxValue >= 9.99) {
-
-            stopUpX(
-              "Максимум! ✦"
+          const index =
+            Number(
+              button.dataset.cell
             );
 
-          }
+          const value =
+            state.ticBoard[index];
 
-        }, 100);
+          button.textContent =
+            value;
 
-      return;
+          button.className =
+            value === "X"
+              ? "x"
+              : value === "O"
+                ? "o"
+                : "";
 
-    }
-
-
-    stopUpX(
-      `Результат: ${upxValue.toFixed(2)}×`
-    );
+        }
+      );
 
   }
 
 
-  function stopUpX(message) {
+  function checkWinner(board) {
 
-    clearInterval(upxTimer);
+    const combos = [
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ];
 
-    upxTimer = null;
 
-    upxRunning = false;
+    for (
+      const combo of combos
+    ) {
+
+      const [a,b,c] =
+        combo;
+
+      if (
+        board[a] &&
+        board[a] === board[b] &&
+        board[a] === board[c]
+      ) {
+
+        return board[a];
+
+      }
+
+    }
 
 
-    const button =
-      $("#upxButton");
+    if (
+      board.every(Boolean)
+    ) {
+
+      return "draw";
+
+    }
+
+
+    return null;
+
+  }
+
+
+  function botMove() {
+
+    if (state.ticGameOver) {
+      return;
+    }
+
+
+    let move;
+
+
+    if (
+      state.ticDifficulty ===
+      "hard"
+    ) {
+
+      move =
+        findBestMove(
+          state.ticBoard
+        );
+
+    } else {
+
+      const empty =
+        state.ticBoard
+          .map(
+            (v,i) =>
+              v ? null : i
+          )
+          .filter(
+            v => v !== null
+          );
+
+      move =
+        empty[
+          Math.floor(
+            Math.random() *
+            empty.length
+          )
+        ];
+
+    }
+
+
+    if (move === undefined) {
+      return;
+    }
+
+
+    state.ticBoard[move] =
+      "O";
+
+    renderTic();
+
 
     const result =
-      $("#upxResult");
-
-
-    if (button) {
-      button.textContent = "START";
-    }
+      checkWinner(
+        state.ticBoard
+      );
 
 
     if (result) {
-      result.textContent = message;
+
+      finishTic(result);
+
+    } else {
+
+      ticStatus.textContent =
+        "Твой ход";
+
     }
 
   }
 
 
-  /* ==================== TIC TAC TOE ==================== */
+  function findBestMove(board) {
 
-  let tttBoard = [];
-  let tttPlayerTurn = true;
-
-
-  function renderTicTacToe() {
-
-    tttBoard = [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
-    ];
+    let bestScore = -Infinity;
+    let bestMove = null;
 
 
-    tttPlayerTurn = true;
+    for (
+      let i = 0;
+      i < 9;
+      i++
+    ) {
+
+      if (!board[i]) {
+
+        board[i] = "O";
+
+        const score =
+          minimax(
+            board,
+            false
+          );
+
+        board[i] = "";
+
+        if (score > bestScore) {
+
+          bestScore = score;
+          bestMove = i;
+
+        }
+
+      }
+
+    }
 
 
-    gamePanelContent.innerHTML = `
-
-      <div class="eyebrow">
-        MINI GAME
-      </div>
-
-      <h3>♛ Tic Tac Queen</h3>
-
-      <p>
-        Ты — ♛. Бот — ♙.
-        Собери три символа подряд.
-      </p>
-
-      <div
-        id="tttBoard"
-        class="ttt-board"
-      ></div>
-
-      <div
-        id="tttStatus"
-        class="ttt-status"
-      >
-        Твой ход
-      </div>
-
-      <button
-        id="tttRestart"
-        class="secondary-btn"
-        type="button"
-        style="margin-top:14px;"
-      >
-        Новая игра
-      </button>
-
-    `;
-
-
-    drawTicTacToe();
-
-
-    $("#tttRestart")?.addEventListener(
-      "click",
-      renderTicTacToe
-    );
+    return bestMove;
 
   }
 
 
-  function drawTicTacToe() {
+  function minimax(board, isMax) {
 
-    const board =
-      $("#tttBoard");
-
-    if (!board) return;
+    const result =
+      checkWinner(board);
 
 
-    board.innerHTML = "";
+    if (result === "O") {
+      return 10;
+    }
+
+    if (result === "X") {
+      return -10;
+    }
+
+    if (result === "draw") {
+      return 0;
+    }
 
 
-    tttBoard.forEach(
-      (cell, index) => {
+    if (isMax) {
 
-        const button =
-          document.createElement(
-            "button"
+      let best = -Infinity;
+
+      for (
+        let i = 0;
+        i < 9;
+        i++
+      ) {
+
+        if (!board[i]) {
+
+          board[i] = "O";
+
+          best = Math.max(
+            best,
+            minimax(
+              board,
+              false
+            )
           );
 
+          board[i] = "";
 
-        button.className =
-          "ttt-cell";
+        }
+
+      }
+
+      return best;
+
+    } else {
+
+      let best = Infinity;
+
+      for (
+        let i = 0;
+        i < 9;
+        i++
+      ) {
+
+        if (!board[i]) {
+
+          board[i] = "X";
+
+          best = Math.min(
+            best,
+            minimax(
+              board,
+              true
+            )
+          );
+
+          board[i] = "";
+
+        }
+
+      }
+
+      return best;
+
+    }
+
+  }
 
 
-        button.textContent =
-          cell;
+  function finishTic(result) {
 
+    state.ticGameOver = true;
+
+    if (result === "X") {
+
+      ticStatus.textContent =
+        "♛ Ты победил!";
+
+      addXP(75);
+
+    } else if (result === "O") {
+
+      ticStatus.textContent =
+        "Бот победил.";
+
+      addXP(20);
+
+    } else {
+
+      ticStatus.textContent =
+        "Ничья.";
+
+      addXP(35);
+
+    }
+
+  }
+
+
+  $$("#ticBoard button")
+    .forEach(
+      button => {
 
         button.addEventListener(
           "click",
-          () => playTicTacToe(index)
-        );
-
-
-        board.appendChild(button);
-
-      }
-    );
-
-  }
-
-
-  function playTicTacToe(index) {
-
-    if (
-      !tttPlayerTurn ||
-      tttBoard[index]
-    ) {
-      return;
-    }
-
-
-    tttBoard[index] = "♛";
-
-    drawTicTacToe();
-
-
-    if (
-      checkWinner(tttBoard, "♛")
-    ) {
-
-      $("#tttStatus").textContent =
-        "Ты победил 👑";
-
-      tttPlayerTurn = false;
-
-      return;
-
-    }
-
-
-    if (
-      tttBoard.every(Boolean)
-    ) {
-
-      $("#tttStatus").textContent =
-        "Ничья ✦";
-
-      tttPlayerTurn = false;
-
-      return;
-
-    }
-
-
-    tttPlayerTurn = false;
-
-    $("#tttStatus").textContent =
-      "Ход бота…";
-
-
-    setTimeout(
-      botTicTacToe,
-      350
-    );
-
-  }
-
-
-  function botTicTacToe() {
-
-    const empty =
-      tttBoard
-        .map(
-          (value, index) =>
-            value
-              ? null
-              : index
-        )
-        .filter(
-          (value) =>
-            value !== null
-        );
-
-
-    if (!empty.length) return;
-
-
-    const move =
-      empty[
-        Math.floor(
-          Math.random() *
-          empty.length
-        )
-      ];
-
-
-    tttBoard[move] = "♙";
-
-
-    drawTicTacToe();
-
-
-    if (
-      checkWinner(tttBoard, "♙")
-    ) {
-
-      $("#tttStatus").textContent =
-        "Бот победил.";
-
-      return;
-
-    }
-
-
-    if (
-      tttBoard.every(Boolean)
-    ) {
-
-      $("#tttStatus").textContent =
-        "Ничья ✦";
-
-      return;
-
-    }
-
-
-    tttPlayerTurn = true;
-
-    $("#tttStatus").textContent =
-      "Твой ход";
-
-  }
-
-
-  function checkWinner(board, player) {
-
-    const combinations = [
-
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-
-      [0, 4, 8],
-      [2, 4, 6]
-
-    ];
-
-
-    return combinations.some(
-      (combo) =>
-        combo.every(
-          (index) =>
-            board[index] === player
-        )
-    );
-
-  }
-
-
-  /* ==================== FRUIT DROP ==================== */
-
-  let fruitTimer = null;
-
-
-  function renderFruitDrop() {
-
-    gamePanelContent.innerHTML = `
-
-      <div class="eyebrow">
-        SKILL GAME
-      </div>
-
-      <h3>🍓 Fruit Drop</h3>
-
-      <p>
-        Лови падающие фрукты.
-        Пока это демо-механика —
-        полноценную физику добавим следующим этапом.
-      </p>
-
-      <div
-        id="fruitBoard"
-        class="fruit-board"
-      ></div>
-
-      <button
-        id="fruitStart"
-        class="primary-btn"
-        type="button"
-        style="margin-top:12px;"
-      >
-        START
-      </button>
-
-      <div
-        id="fruitResult"
-        class="game-notice"
-      ></div>
-
-    `;
-
-
-    $("#fruitStart")?.addEventListener(
-      "click",
-      startFruitDrop
-    );
-
-  }
-
-
-  function startFruitDrop() {
-
-    const board =
-      $("#fruitBoard");
-
-
-    if (!board) return;
-
-
-    board.innerHTML = "";
-
-
-    const fruits = [
-      "🍓",
-      "🍒",
-      "🍋",
-      "🍑",
-      "🍇",
-      "🍉"
-    ];
-
-
-    let score = 0;
-
-
-    $("#fruitResult").textContent =
-      "Собирай фрукты!";
-
-
-    if (fruitTimer) {
-      clearInterval(fruitTimer);
-    }
-
-
-    fruitTimer =
-      setInterval(() => {
-
-        const fruit =
-          document.createElement(
-            "div"
-          );
-
-
-        fruit.className =
-          "fruit";
-
-
-        fruit.textContent =
-          fruits[
-            Math.floor(
-              Math.random() *
-              fruits.length
-            )
-          ];
-
-
-        fruit.style.left =
-          `${Math.random() * 82}%`;
-
-
-        fruit.style.top =
-          "-55px";
-
-
-        board.appendChild(fruit);
-
-
-        let position = -55;
-
-
-        const fall =
-          setInterval(() => {
-
-            position += 3;
-
-            fruit.style.top =
-              `${position}px`;
-
+          () => {
 
             if (
-              position >
-              board.clientHeight
+              state.ticGameOver ||
+              state.ticBoard[
+                Number(
+                  button.dataset.cell
+                )
+              ]
             ) {
+              return;
+            }
 
-              clearInterval(fall);
 
-              fruit.remove();
+            const index =
+              Number(
+                button.dataset.cell
+              );
+
+            state.ticBoard[index] =
+              "X";
+
+            renderTic();
+
+
+            const result =
+              checkWinner(
+                state.ticBoard
+              );
+
+
+            if (result) {
+
+              finishTic(result);
+              return;
 
             }
 
-          }, 30);
 
+            ticStatus.textContent =
+              "Бот думает...";
 
-        fruit.addEventListener(
-          "click",
-          () => {
-
-            score += 10;
-
-            $("#fruitResult").textContent =
-              `Score: ${score}`;
-
-            clearInterval(fall);
-
-            fruit.remove();
+            setTimeout(
+              botMove,
+              450
+            );
 
           }
         );
 
-
-      }, 650);
-
-
-    setTimeout(() => {
-
-      clearInterval(fruitTimer);
-
-      fruitTimer = null;
-
-      $("#fruitResult").textContent =
-        `Раунд закончен • Score: ${score}`;
-
-    }, 15000);
-
-  }
-
-
-  /* ==================== CLEANUP ==================== */
-
-  window.addEventListener(
-    "beforeunload",
-    () => {
-
-      if (upxTimer) {
-        clearInterval(upxTimer);
       }
+    );
 
-      if (fruitTimer) {
-        clearInterval(fruitTimer);
-      }
+
+  $("#ticReset")?.addEventListener(
+    "click",
+    resetTic
+  );
+
+
+  $$(".tic-mode").forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          $$(".tic-mode")
+            .forEach(
+              item =>
+                item.classList.remove(
+                  "active"
+                )
+            );
+
+          button.classList.add(
+            "active"
+          );
+
+          state.ticDifficulty =
+            button.dataset.difficulty;
+
+          resetTic();
+
+        }
+      );
 
     }
   );
 
 
-  /* ==================== INITIAL STATE ==================== */
+  /* ================= MINI GAME OPEN ================= */
+
+  $$("[data-game]").forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const game =
+            button.dataset.game;
+
+
+          $("#ticGame")
+            .classList.toggle(
+              "hidden",
+              game !== "tic"
+            );
+
+          $("#fruitGame")
+            .classList.toggle(
+              "hidden",
+              game !== "fruit"
+            );
+
+          window.scrollTo({
+            top:
+              document.body.scrollHeight,
+            behavior: "smooth"
+          });
+
+        }
+      );
+
+    }
+  );
+
+
+  $("#ticClose")?.addEventListener(
+    "click",
+    () => {
+      $("#ticGame")
+        .classList.add("hidden");
+    }
+  );
+
+
+  $("#fruitClose")?.addEventListener(
+    "click",
+    () => {
+      $("#fruitGame")
+        .classList.add("hidden");
+    }
+  );
+
+
+  /* ================= FRUIT DROP ================= */
+
+  const fruitBoard =
+    $("#fruitBoard");
+
+  const fruitScore =
+    $("#fruitScore");
+
+  const fruitTime =
+    $("#fruitTime");
+
+  const fruitStart =
+    $("#fruitStart");
+
+
+  const fruits = [
+    "🍓",
+    "🍒",
+    "🍊",
+    "🍋",
+    "🍇",
+    "🍉",
+    "🥝"
+  ];
+
+
+  function createFruitGrid() {
+
+    state.fruitGrid =
+      Array.from(
+        { length: 42 },
+        () =>
+          fruits[
+            Math.floor(
+              Math.random() *
+              fruits.length
+            )
+          ]
+      );
+
+    renderFruit();
+
+  }
+
+
+  function renderFruit() {
+
+    fruitBoard.innerHTML = "";
+
+    state.fruitGrid.forEach(
+      (fruit,index) => {
+
+        const cell =
+          document.createElement(
+            "div"
+          );
+
+        cell.className =
+          "fruit-cell";
+
+        cell.dataset.index =
+          index;
+
+        cell.textContent =
+          fruit;
+
+        fruitBoard.appendChild(
+          cell
+        );
+
+      }
+    );
+
+  }
+
+
+  function getFruitCell(target) {
+
+    if (
+      !target ||
+      !target.classList.contains(
+        "fruit-cell"
+      )
+    ) {
+
+      return null;
+
+    }
+
+    return target;
+
+  }
+
+
+  function collectFruit(cell) {
+
+    if (
+      !state.fruitRunning ||
+      !cell
+    ) {
+      return;
+    }
+
+
+    const index =
+      Number(
+        cell.dataset.index
+      );
+
+    const value =
+      state.fruitGrid[index];
+
+
+    if (
+      state.fruitPath.length &&
+      state.fruitPath.includes(index)
+    ) {
+      return;
+    }
+
+
+    if (
+      state.fruitPath.length
+    ) {
+
+      const previous =
+        state.fruitPath[
+          state.fruitPath.length - 1
+        ];
+
+      const previousValue =
+        state.fruitGrid[previous];
+
+      const row =
+        Math.floor(index / 7);
+
+      const col =
+        index % 7;
+
+      const prow =
+        Math.floor(previous / 7);
+
+      const pcol =
+        previous % 7;
+
+
+      const adjacent =
+        Math.abs(row - prow) <= 1 &&
+        Math.abs(col - pcol) <= 1;
+
+
+      if (
+        !adjacent ||
+        value !== previousValue
+      ) {
+        return;
+      }
+
+    }
+
+
+    state.fruitPath.push(index);
+
+    cell.classList.add("pop");
+
+  }
+
+
+  function finishFruitPath() {
+
+    if (
+      state.fruitPath.length < 2
+    ) {
+
+      state.fruitPath = [];
+
+      $$(".fruit-cell")
+        .forEach(
+          cell =>
+            cell.classList.remove(
+              "pop"
+            )
+        );
+
+      return;
+
+    }
+
+
+    const amount =
+      state.fruitPath.length;
+
+
+    state.fruitScore +=
+      amount * amount * 5;
+
+
+    fruitScore.textContent =
+      state.fruitScore;
+
+
+    const removeSet =
+      new Set(
+        state.fruitPath
+      );
+
+
+    const newGrid =
+      state.fruitGrid.filter(
+        (_,index) =>
+          !removeSet.has(index)
+      );
+
+
+    while (
+      newGrid.length < 42
+    ) {
+
+      newGrid.unshift(
+        fruits[
+          Math.floor(
+            Math.random() *
+            fruits.length
+          )
+        ]
+      );
+
+    }
+
+
+    state.fruitGrid =
+      newGrid.slice(-42);
+
+    state.fruitPath = [];
+
+    renderFruit();
+
+  }
+
+
+  let fruitPointerDown = false;
+
+
+  fruitBoard.addEventListener(
+    "pointerdown",
+    (event) => {
+
+      if (!state.fruitRunning) {
+        return;
+      }
+
+      fruitPointerDown = true;
+      state.fruitPath = [];
+
+      const cell =
+        getFruitCell(
+          event.target
+        );
+
+      collectFruit(cell);
+
+    }
+  );
+
+
+  fruitBoard.addEventListener(
+    "pointermove",
+    (event) => {
+
+      if (!fruitPointerDown) {
+        return;
+      }
+
+      const element =
+        document.elementFromPoint(
+          event.clientX,
+          event.clientY
+        );
+
+      collectFruit(
+        getFruitCell(element)
+      );
+
+    }
+  );
+
+
+  window.addEventListener(
+    "pointerup",
+    () => {
+
+      if (!fruitPointerDown) {
+        return;
+      }
+
+      fruitPointerDown = false;
+
+      finishFruitPath();
+
+    }
+  );
+
+
+  function startFruit() {
+
+    if (state.fruitRunning) {
+      return;
+    }
+
+    state.fruitRunning = true;
+
+    state.fruitScore = 0;
+    state.fruitTime = 30;
+
+    fruitScore.textContent = "0";
+    fruitTime.textContent = "30";
+
+    fruitStart.textContent =
+      "Игра идёт...";
+
+    createFruitGrid();
+
+
+    state.fruitTimer =
+      setInterval(() => {
+
+        state.fruitTime--;
+
+        fruitTime.textContent =
+          state.fruitTime;
+
+
+        if (
+          state.fruitTime <= 0
+        ) {
+
+          clearInterval(
+            state.fruitTimer
+          );
+
+          state.fruitRunning =
+            false;
+
+          fruitStart.textContent =
+            `Результат: ${state.fruitScore}`;
+
+          addXP(
+            Math.floor(
+              state.fruitScore / 20
+            )
+          );
+
+        }
+
+      }, 1000);
+
+  }
+
+
+  fruitStart?.addEventListener(
+    "click",
+    startFruit
+  );
+
+
+  /* ================= INITIAL ================= */
+
+  resetTic();
+  createFruitGrid();
+  nextBattle();
+  updateStats();
 
   auth.classList.add("active");
-
   shell.classList.remove("active");
-
-  showView("battle");
 
 });
