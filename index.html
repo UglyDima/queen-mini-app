@@ -2,13 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-
-  <meta name="theme-color" content="#070707">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <title>Queen</title>
 
@@ -27,32 +21,27 @@
 
 <body>
 
-  <!-- ==================== LOGIN ==================== -->
+  <!-- ================= LOGIN ================= -->
 
   <section id="auth" class="screen active">
+    <div class="login-screen">
 
-    <div class="auth-screen">
-
-      <div class="auth-brand">
+      <div class="login-brand">
         <div class="queen-logo">Queen</div>
         <div class="queen-subtitle">SOCIAL GAME</div>
       </div>
 
       <div class="auth-card glass-card">
 
-        <div class="auth-label">WELCOME BACK</div>
+        <span class="eyebrow">WELCOME BACK</span>
 
         <h1>Войти в Queen</h1>
 
-        <p class="auth-description">
+        <p>
           Твой мир уже ждёт тебя.
         </p>
 
-        <button
-          id="loginBtn"
-          class="primary-btn"
-          type="button"
-        >
+        <button id="loginBtn" class="primary-btn">
           Войти в Queen
         </button>
 
@@ -60,416 +49,48 @@
 
       </div>
 
-      <div class="auth-footer">
+      <div class="login-footer">
         QUEEN • SOCIAL GAME
       </div>
 
     </div>
-
   </section>
 
 
-  <!-- ==================== APP ==================== -->
+  <!-- ================= APP ================= -->
 
   <section id="shell" class="screen">
 
     <main class="content">
 
+      <!-- ================= PROFILE ================= -->
 
-      <!-- ==================== BATTLE ==================== -->
+      <section id="profile" class="view active">
 
-      <section id="battle" class="view active">
-
-        <div class="battle-header">
-
+        <div class="page-top">
           <div>
-            <span class="eyebrow">QUEEN ARENA</span>
-            <h2>Battle</h2>
+            <span class="eyebrow">YOUR SPACE</span>
+            <h2>Profile</h2>
           </div>
 
-          <div class="season-badge">
-            <span>SEASON</span>
-            <b>01</b>
-          </div>
-
-        </div>
-
-
-        <div class="battle-subtitle">
-          Выбери лучший стиль и подними свой рейтинг.
-        </div>
-
-
-        <!-- CURRENT BATTLE -->
-
-        <div class="battle-card glass-card">
-
-          <div class="battle-top">
-
-            <span class="battle-number">
-              STYLE BATTLE #024
-            </span>
-
-            <span class="battle-live">
-              ● LIVE
-            </span>
-
-          </div>
-
-
-          <div class="versus-area">
-
-            <!-- PLAYER A -->
-
-            <div class="battle-player">
-
-              <div class="battle-avatar avatar-a">
-                ♛
-              </div>
-
-              <b>Luna</b>
-
-              <span>
-                LVL 18
-              </span>
-
-              <small>
-                1 842 RATING
-              </small>
-
-            </div>
-
-
-            <div class="versus">
-              VS
-            </div>
-
-
-            <!-- PLAYER B -->
-
-            <div class="battle-player">
-
-              <div class="battle-avatar avatar-b">
-                ✦
-              </div>
-
-              <b>Mila</b>
-
-              <span>
-                LVL 16
-              </span>
-
-              <small>
-                1 796 RATING
-              </small>
-
-            </div>
-
-          </div>
-
-
-          <div class="battle-theme">
-            <span>THEME</span>
-            <b>GLOSS NIGHT</b>
-          </div>
-
-
-          <div class="battle-style-row">
-
-            <div class="battle-style">
-              <span>👗</span>
-              <small>Pink Aura</small>
-            </div>
-
-            <div class="battle-style">
-              <span>💎</span>
-              <small>Diamond Glow</small>
-            </div>
-
-          </div>
-
-
-          <div class="battle-question">
-            Кто собрал лучший образ?
-          </div>
-
-
-          <div class="vote-row">
-
-            <button
-              class="vote-btn"
-              data-vote="luna"
-              type="button"
-            >
-              <span>♡</span>
-              Luna
-            </button>
-
-            <button
-              class="vote-btn"
-              data-vote="mila"
-              type="button"
-            >
-              <span>♡</span>
-              Mila
-            </button>
-
-          </div>
-
-
-          <div
-            id="voteResult"
-            class="vote-result"
-          ></div>
-
-        </div>
-
-
-        <!-- RATING -->
-
-        <div class="section-heading battle-section-heading">
-
-          <div>
-            <span class="eyebrow">YOUR BATTLE</span>
-            <h3>Статистика</h3>
-          </div>
-
-        </div>
-
-
-        <div class="battle-stats">
-
-          <div class="battle-stat glass-card">
-            <span>👑</span>
-            <small>RATING</small>
-            <b id="battleRating">1 000</b>
-          </div>
-
-          <div class="battle-stat glass-card">
-            <span>⚔️</span>
-            <small>WIN RATE</small>
-            <b id="battleWinRate">0%</b>
-          </div>
-
-          <div class="battle-stat glass-card">
-            <span>🔥</span>
-            <small>STREAK</small>
-            <b id="battleStreak">0</b>
-          </div>
-
-          <div class="battle-stat glass-card">
-            <span>❤️</span>
-            <small>VOTES</small>
-            <b id="battleVotes">0</b>
-          </div>
-
-        </div>
-
-
-        <!-- LEADERBOARD -->
-
-        <div class="section-heading battle-section-heading">
-
-          <div>
-            <span class="eyebrow">SEASON 01</span>
-            <h3>Top Battle</h3>
-          </div>
-
-          <span class="leaderboard-time">
-            23 DAYS
-          </span>
-
-        </div>
-
-
-        <div class="leaderboard glass-card">
-
-          <div class="leaderboard-row">
-
-            <span class="rank gold">01</span>
-
-            <div class="leader-avatar">
-              ♛
-            </div>
-
-            <div class="leader-info">
-              <b>Luna</b>
-              <span>126W • 83L</span>
-            </div>
-
-            <strong>2 481</strong>
-
-          </div>
-
-
-          <div class="leaderboard-row">
-
-            <span class="rank silver">02</span>
-
-            <div class="leader-avatar">
-              ✦
-            </div>
-
-            <div class="leader-info">
-              <b>Sofia</b>
-              <span>118W • 76L</span>
-            </div>
-
-            <strong>2 392</strong>
-
-          </div>
-
-
-          <div class="leaderboard-row">
-
-            <span class="rank bronze">03</span>
-
-            <div class="leader-avatar">
-              ♡
-            </div>
-
-            <div class="leader-info">
-              <b>Mila</b>
-              <span>104W • 71L</span>
-            </div>
-
-            <strong>2 310</strong>
-
-          </div>
-
-
-          <div class="leaderboard-row">
-
-            <span class="rank">04</span>
-
-            <div class="leader-avatar">
-              ✧
-            </div>
-
-            <div class="leader-info">
-              <b>Aria</b>
-              <span>98W • 69L</span>
-            </div>
-
-            <strong>2 204</strong>
-
-          </div>
-
-        </div>
-
-
-        <button
-          id="mostLovedBtn"
-          class="secondary-btn leaderboard-switch"
-          type="button"
-        >
-          ❤️ Most Loved
-        </button>
-
-
-        <div
-          id="mostLoved"
-          class="most-loved hidden"
-        >
-
-          <div class="loved-row">
-            <span>01</span>
-            <b>Luna</b>
-            <strong>12.4K ❤️</strong>
-          </div>
-
-          <div class="loved-row">
-            <span>02</span>
-            <b>Mila</b>
-            <strong>11.8K ❤️</strong>
-          </div>
-
-          <div class="loved-row">
-            <span>03</span>
-            <b>Sofia</b>
-            <strong>10.9K ❤️</strong>
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ==================== PARTY ==================== -->
-
-      <section id="party" class="view">
-
-        <div class="page-heading">
-          <span class="eyebrow">SOCIAL</span>
-          <h2>Party</h2>
-        </div>
-
-        <p class="view-description">
-          Общайся, создавай связи и собирай свою компанию.
-        </p>
-
-
-        <div class="party-card glass-card">
-
-          <div class="party-icon">
-            👥
-          </div>
-
-          <h3>Party скоро</h3>
-
-          <p>
-            Здесь появятся друзья, комнаты и социальные активности.
-          </p>
-
-          <button
-            class="secondary-btn"
-            type="button"
-          >
-            Coming soon
-          </button>
-
-        </div>
-
-      </section>
-
-
-      <!-- ==================== PROFILE ==================== -->
-
-      <section id="profile" class="view">
-
-        <div class="page-heading">
-          <span class="eyebrow">YOUR SPACE</span>
-          <h2>Profile</h2>
+          <div class="top-badge">♛</div>
         </div>
 
 
         <div class="profile-card glass-card">
 
-          <div class="profile-top">
-
-            <div
-              id="profileAvatar"
-              class="avatar profile-avatar"
-            >
-              ♙
-            </div>
-
-            <div class="profile-main">
-
-              <h3 id="profileName">
-                Queen
-              </h3>
-
-              <span class="profile-tag">
-                QUEEN • LVL 01
-              </span>
-
-            </div>
-
+          <div id="profileAvatar" class="profile-avatar">
+            ♙
           </div>
 
+          <h3 id="profileName">Queen</h3>
 
-          <div class="profile-status">
+          <span class="profile-tag">
+            QUEEN • LVL 01
+          </span>
+
+
+          <div class="profile-stats">
 
             <div class="profile-stat">
               <span>♛</span>
@@ -483,23 +104,10 @@
               <b id="profileLevel">01</b>
             </div>
 
-          </div>
-
-
-          <div class="profile-battle-preview">
-
-            <div>
-              <small>BATTLE RATING</small>
-              <b id="profileBattleRating">
-                1 000
-              </b>
-            </div>
-
-            <div>
-              <small>WIN RATE</small>
-              <b id="profileProfileWinRate">
-                0%
-              </b>
+            <div class="profile-stat">
+              <span>⚡</span>
+              <small>XP</small>
+              <b id="profileXP">120</b>
             </div>
 
           </div>
@@ -507,64 +115,54 @@
         </div>
 
 
-        <!-- REAL PHOTO -->
+        <!-- Battle mini stat -->
 
         <div class="section-heading">
+          <div>
+            <span class="eyebrow">YOUR BATTLE</span>
+            <h3>Style Battle</h3>
+          </div>
+        </div>
+
+        <div class="battle-mini glass-card">
 
           <div>
-            <span class="eyebrow">OPTIONAL</span>
-            <h3>Real-life photo</h3>
+            <span>SEASON RATING</span>
+            <strong id="profileRating">1000</strong>
+          </div>
+
+          <div>
+            <span>WINS</span>
+            <strong id="profileWins">0</strong>
+          </div>
+
+          <div>
+            <span>STREAK</span>
+            <strong id="profileStreak">0</strong>
           </div>
 
         </div>
 
 
-        <div class="real-photo-card glass-card">
-
-          <div class="real-photo-icon">
-            📷
-          </div>
-
-          <div class="real-photo-info">
-            <b>Добавить фото</b>
-            <span>
-              Необязательно. Ты сам решаешь,
-              показывать ли её в профиле.
-            </span>
-          </div>
-
-          <button
-            id="realPhotoBtn"
-            class="photo-action"
-            type="button"
-          >
-            +
-          </button>
-
-        </div>
-
-
-        <!-- COSMETICS -->
+        <!-- Cosmetics -->
 
         <div class="section-heading">
-
           <div>
             <span class="eyebrow">YOUR COSMETICS</span>
             <h3>Установлено</h3>
           </div>
-
         </div>
 
 
-        <div class="equipped-cosmetics">
+        <div class="cosmetic-list">
 
-          <div class="equipped-item glass-card">
+          <div class="cosmetic-item glass-card">
 
-            <div class="equipped-preview">
+            <div class="cosmetic-preview aura-preview">
               ✦
             </div>
 
-            <div class="equipped-info">
+            <div class="cosmetic-info">
               <b>Pink Aura</b>
               <span>Эффект профиля</span>
               <small>RARE • EQUIPPED</small>
@@ -573,13 +171,13 @@
           </div>
 
 
-          <div class="equipped-item glass-card">
+          <div class="cosmetic-item glass-card">
 
-            <div class="equipped-preview">
+            <div class="cosmetic-preview frame-preview">
               ◇
             </div>
 
-            <div class="equipped-info">
+            <div class="cosmetic-info">
               <b>Gloss Frame</b>
               <span>Рамка аватара</span>
               <small>EPIC • EQUIPPED</small>
@@ -592,14 +190,418 @@
       </section>
 
 
-      <!-- ==================== STYLE ==================== -->
+      <!-- ================= FLIP / CHANCE ================= -->
+
+      <section id="flip" class="view">
+
+        <span class="eyebrow">CHANCE</span>
+        <h2>Flip</h2>
+
+        <p class="view-description">
+          Удача и быстрые игровые режимы внутри Queen.
+        </p>
+
+
+        <!-- Fortune -->
+
+        <div class="game-section">
+
+          <div class="game-section-title">
+            <div>
+              <span>01</span>
+              <h3>Fortune</h3>
+            </div>
+
+            <span class="mode-label">WHEEL</span>
+          </div>
+
+
+          <div class="fortune-card glass-card">
+
+            <div class="wheel-wrap">
+
+              <div class="wheel-pointer"></div>
+
+              <div id="fortuneWheel" class="fortune-wheel">
+
+                <div class="wheel-center">
+                  ♛
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div id="fortuneResult" class="fortune-result">
+              Крути колесо
+            </div>
+
+            <button id="fortuneSpin" class="primary-btn">
+              Крутить Fortune
+            </button>
+
+            <small class="game-note">
+              Виртуальные награды: XP, предметы и бонусы.
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <!-- Up-X -->
+
+        <div class="game-section">
+
+          <div class="game-section-title">
+            <div>
+              <span>02</span>
+              <h3>Up-X</h3>
+            </div>
+
+            <span class="mode-label">REACTION</span>
+          </div>
+
+
+          <div class="upx-card glass-card">
+
+            <div class="upx-top">
+
+              <div>
+                <span>MULTIPLIER</span>
+                <strong id="upxMultiplier">1.00×</strong>
+              </div>
+
+              <div id="upxStatus" class="upx-status">
+                READY
+              </div>
+
+            </div>
+
+
+            <div class="chart">
+
+              <div class="chart-grid"></div>
+
+              <svg viewBox="0 0 360 150" preserveAspectRatio="none">
+                <polyline
+                  id="upxLine"
+                  points="0,135 40,125 80,112 120,98 160,80 200,65 240,50 280,35 320,20 360,10"
+                />
+              </svg>
+
+            </div>
+
+
+            <button id="upxStart" class="primary-btn">
+              Start
+            </button>
+
+            <button id="upxStop" class="secondary-btn hidden">
+              STOP
+            </button>
+
+            <small class="game-note">
+              Останови множитель вовремя и набери максимум XP.
+            </small>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= PARTY ================= -->
+
+      <section id="party" class="view">
+
+        <span class="eyebrow">SOCIAL</span>
+        <h2>Party</h2>
+
+        <p class="view-description">
+          Общайся, создавай связи и собирай свою компанию.
+        </p>
+
+        <div class="party-card glass-card">
+
+          <div class="party-icon">
+            👥
+          </div>
+
+          <h3>Party скоро</h3>
+
+          <p>
+            Друзья, комнаты и социальные активности появятся здесь.
+          </p>
+
+          <button class="secondary-btn" type="button">
+            Coming soon
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= BATTLE ================= -->
+
+      <section id="battle" class="view">
+
+        <div class="battle-header">
+
+          <div>
+            <span class="eyebrow">QUEEN ARENA</span>
+            <h2>Style Battle</h2>
+          </div>
+
+          <div class="battle-season">
+            SEASON 01
+          </div>
+
+        </div>
+
+
+        <!-- Active battle -->
+
+        <div id="activeBattle" class="active-battle glass-card hidden">
+
+          <div class="active-battle-top">
+            <span>YOUR BATTLE</span>
+            <strong id="battleTimer">15:00</strong>
+          </div>
+
+          <div class="active-battle-progress">
+            <div id="battleProgress"></div>
+          </div>
+
+          <div class="active-battle-main">
+
+            <div>
+              <small>YOUR LIKES</small>
+              <strong id="myBattleLikes">0</strong>
+            </div>
+
+            <div class="battle-vs-small">
+              VS
+            </div>
+
+            <div>
+              <small>OPPONENT</small>
+              <strong id="opponentLikes">0</strong>
+            </div>
+
+          </div>
+
+          <button id="leaveBattle" class="secondary-btn">
+            Оставить Battle активным
+          </button>
+
+        </div>
+
+
+        <!-- Voting -->
+
+        <div class="battle-card glass-card">
+
+          <div class="battle-card-top">
+
+            <div>
+              <span id="battleNumber">#024</span>
+              <small>STYLE MATCH</small>
+            </div>
+
+            <div id="battleVotes">
+              0 — 0
+            </div>
+
+          </div>
+
+
+          <div class="fighters">
+
+            <button
+              id="fighterLeft"
+              class="fighter"
+              type="button"
+            >
+
+              <div class="fighter-avatar avatar-luna">
+                L
+              </div>
+
+              <strong id="fighterLeftName">
+                Luna
+              </strong>
+
+              <span id="fighterLeftLikes">
+                124 likes
+              </span>
+
+              <b>VOTE</b>
+
+            </button>
+
+
+            <div class="fighter-vs">
+              VS
+            </div>
+
+
+            <button
+              id="fighterRight"
+              class="fighter"
+              type="button"
+            >
+
+              <div class="fighter-avatar avatar-mila">
+                M
+              </div>
+
+              <strong id="fighterRightName">
+                Mila
+              </strong>
+
+              <span id="fighterRightLikes">
+                119 likes
+              </span>
+
+              <b>VOTE</b>
+
+            </button>
+
+          </div>
+
+
+          <div class="battle-theme">
+            <span>THEME</span>
+            <strong id="battleTheme">
+              NIGHT GLAM
+            </strong>
+          </div>
+
+
+          <div class="battle-play-area">
+
+            <button id="battlePlay" class="battle-play-btn">
+              <span>▶</span>
+              PLAY
+            </button>
+
+            <p>
+              Запусти своё Style Battle
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- Stats -->
+
+        <div class="section-heading battle-heading">
+
+          <div>
+            <span class="eyebrow">YOUR STATS</span>
+            <h3>Battle Stats</h3>
+          </div>
+
+        </div>
+
+
+        <div class="battle-stats">
+
+          <div class="stat-card glass-card">
+            <span>RATING</span>
+            <strong id="battleRating">1000</strong>
+          </div>
+
+          <div class="stat-card glass-card">
+            <span>WINS</span>
+            <strong id="battleWins">0</strong>
+          </div>
+
+          <div class="stat-card glass-card">
+            <span>WIN RATE</span>
+            <strong id="battleWinRate">0%</strong>
+          </div>
+
+          <div class="stat-card glass-card">
+            <span>STREAK</span>
+            <strong id="battleStreak">0</strong>
+          </div>
+
+        </div>
+
+
+        <!-- Leaderboard -->
+
+        <div class="section-heading battle-heading">
+
+          <div>
+            <span class="eyebrow">TOP QUEENS</span>
+            <h3>Leaderboard</h3>
+          </div>
+
+        </div>
+
+
+        <div class="leaderboard glass-card">
+
+          <div class="leader-row first">
+            <span>#1</span>
+            <div class="leader-avatar">A</div>
+            <div>
+              <strong>Aria</strong>
+              <small>2 480 rating</small>
+            </div>
+            <b>♛</b>
+          </div>
+
+          <div class="leader-row">
+            <span>#2</span>
+            <div class="leader-avatar">L</div>
+            <div>
+              <strong>Luna</strong>
+              <small>2 320 rating</small>
+            </div>
+            <b>♛</b>
+          </div>
+
+          <div class="leader-row">
+            <span>#3</span>
+            <div class="leader-avatar">M</div>
+            <div>
+              <strong>Mila</strong>
+              <small>2 210 rating</small>
+            </div>
+            <b>♛</b>
+          </div>
+
+          <div class="leader-row user-row">
+            <span>#24</span>
+            <div id="leaderUserAvatar" class="leader-avatar">
+              Q
+            </div>
+            <div>
+              <strong id="leaderUserName">You</strong>
+              <small id="leaderUserRating">1000 rating</small>
+            </div>
+            <b>YOU</b>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================= STYLE ================= -->
 
       <section id="style" class="view">
 
-        <div class="page-heading">
-          <span class="eyebrow">CUSTOMIZATION</span>
-          <h2>Style</h2>
-        </div>
+        <span class="eyebrow">CUSTOMIZATION</span>
+        <h2>Style</h2>
 
         <p class="view-description">
           Собирай свой визуальный образ в Queen.
@@ -608,52 +610,36 @@
 
         <div class="style-grid">
 
-          <button
-            class="style-item glass-card selected"
-            type="button"
-          >
-            <div class="style-preview">✦</div>
-
-            <div class="style-item-info">
+          <button class="style-item glass-card selected">
+            <div class="style-preview aura-preview">✦</div>
+            <div>
               <b>Pink Aura</b>
               <span>RARE</span>
             </div>
           </button>
 
 
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-            <div class="style-preview">◇</div>
-
-            <div class="style-item-info">
+          <button class="style-item glass-card">
+            <div class="style-preview frame-preview">◇</div>
+            <div>
               <b>Gloss Frame</b>
               <span>EPIC</span>
             </div>
           </button>
 
 
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-            <div class="style-preview">♛</div>
-
-            <div class="style-item-info">
+          <button class="style-item glass-card">
+            <div class="style-preview crown-preview">♛</div>
+            <div>
               <b>Royal Crown</b>
-              <span>LEGEND</span>
+              <span>LEGENDARY</span>
             </div>
           </button>
 
 
-          <button
-            class="style-item glass-card"
-            type="button"
-          >
-            <div class="style-preview">✧</div>
-
-            <div class="style-item-info">
+          <button class="style-item glass-card">
+            <div class="style-preview glow-preview">✧</div>
+            <div>
               <b>Diamond Glow</b>
               <span>EPIC</span>
             </div>
@@ -664,143 +650,150 @@
       </section>
 
 
-      <!-- ==================== MINI GAMES ==================== -->
+      <!-- ================= GAMES ================= -->
 
       <section id="games" class="view">
 
-        <div class="page-heading">
-          <span class="eyebrow">PLAY</span>
-          <h2>Mini Games</h2>
-        </div>
+        <span class="eyebrow">PLAY</span>
+        <h2>Mini Games</h2>
 
         <p class="view-description">
-          Короткие игры внутри мира Queen.
+          Быстрые игры внутри мира Queen.
         </p>
 
 
-        <div class="games-list">
+        <button
+          class="game-card glass-card"
+          data-game="tic"
+          type="button"
+        >
+
+          <div class="game-card-icon">
+            ⭕
+          </div>
+
+          <div>
+            <b>Tic-Tac-Toe</b>
+            <span>Bot / Player</span>
+          </div>
+
+          <i>→</i>
+
+        </button>
 
 
-          <!-- FORTUNA -->
+        <button
+          class="game-card glass-card"
+          data-game="fruit"
+          type="button"
+        >
 
-          <button
-            class="game-card glass-card"
-            data-game="fortuna"
-            type="button"
-          >
+          <div class="game-card-icon">
+            🍓
+          </div>
 
-            <div class="game-card-icon">
-              🔮
+          <div>
+            <b>Fruit Drop</b>
+            <span>Skill • Speed</span>
+          </div>
+
+          <i>→</i>
+
+        </button>
+
+
+        <!-- Tic Tac Toe -->
+
+        <div id="ticGame" class="mini-game glass-card hidden">
+
+          <div class="mini-game-head">
+            <div>
+              <span>MINI GAME</span>
+              <h3>Tic-Tac-Toe</h3>
             </div>
 
-            <div class="game-card-info">
-              <b>Fortuna</b>
-              <span>Ежедневная удача</span>
-            </div>
-
-            <div class="game-arrow">
-              →
-            </div>
-
-          </button>
+            <button id="ticClose">×</button>
+          </div>
 
 
-          <!-- UP-X -->
+          <div class="tic-mode-row">
 
-          <button
-            class="game-card glass-card"
-            data-game="upx"
-            type="button"
-          >
+            <button class="tic-mode active" data-difficulty="hard">
+              HARD BOT
+            </button>
 
-            <div class="game-card-icon">
-              📈
-            </div>
+            <button class="tic-mode" data-difficulty="normal">
+              NORMAL
+            </button>
 
-            <div class="game-card-info">
-              <b>Up-X</b>
-              <span>Останови множитель</span>
-            </div>
-
-            <div class="game-arrow">
-              →
-            </div>
-
-          </button>
+          </div>
 
 
-          <!-- TIC TAC TOE -->
+          <div id="ticBoard" class="tic-board">
 
-          <button
-            class="game-card glass-card"
-            data-game="ttt"
-            type="button"
-          >
+            <button data-cell="0"></button>
+            <button data-cell="1"></button>
+            <button data-cell="2"></button>
 
-            <div class="game-card-icon">
-              ♛
-            </div>
+            <button data-cell="3"></button>
+            <button data-cell="4"></button>
+            <button data-cell="5"></button>
 
-            <div class="game-card-info">
-              <b>Tic Tac Queen</b>
-              <span>Сыграй против бота</span>
-            </div>
+            <button data-cell="6"></button>
+            <button data-cell="7"></button>
+            <button data-cell="8"></button>
 
-            <div class="game-arrow">
-              →
-            </div>
-
-          </button>
+          </div>
 
 
-          <!-- FRUIT DROP -->
+          <div id="ticStatus" class="mini-status">
+            Твой ход
+          </div>
 
-          <button
-            class="game-card glass-card"
-            data-game="fruit"
-            type="button"
-          >
-
-            <div class="game-card-icon">
-              🍓
-            </div>
-
-            <div class="game-card-info">
-              <b>Fruit Drop</b>
-              <span>Лови и соединяй фрукты</span>
-            </div>
-
-            <div class="game-arrow">
-              →
-            </div>
-
+          <button id="ticReset" class="primary-btn">
+            Новая игра
           </button>
 
         </div>
 
 
-        <div
-          id="gameNotice"
-          class="game-notice"
-        ></div>
+        <!-- Fruit -->
+
+        <div id="fruitGame" class="mini-game glass-card hidden">
+
+          <div class="mini-game-head">
+            <div>
+              <span>MINI GAME</span>
+              <h3>Fruit Drop</h3>
+            </div>
+
+            <button id="fruitClose">×</button>
+          </div>
 
 
-        <!-- GAME PANEL -->
+          <div class="fruit-info">
+            <div>
+              <span>SCORE</span>
+              <strong id="fruitScore">0</strong>
+            </div>
 
-        <div
-          id="gamePanel"
-          class="game-panel glass-card hidden"
-        >
+            <div>
+              <span>TIME</span>
+              <strong id="fruitTime">30</strong>
+            </div>
+          </div>
 
-          <button
-            id="closeGame"
-            class="close-game"
-            type="button"
-          >
-            ×
+
+          <div id="fruitBoard" class="fruit-board"></div>
+
+
+          <button id="fruitStart" class="primary-btn">
+            Start Fruit Drop
           </button>
 
-          <div id="gamePanelContent"></div>
+          <small class="game-note">
+            Веди пальцем по соседним одинаковым фруктам.
+          </small>
 
         </div>
 
@@ -809,52 +802,34 @@
     </main>
 
 
-    <!-- ==================== BOTTOM NAV ==================== -->
+    <!-- ================= NAV ================= -->
 
     <nav class="bottom-nav">
 
-      <button
-        data-view="battle"
-        class="active"
-        type="button"
-      >
-        <span>👑</span>
+      <button data-view="flip">
+        <span>♢</span>
+        <small>Flip</small>
+      </button>
+
+      <button data-view="battle">
+        <span>⚔</span>
         <small>Battle</small>
       </button>
-
-
-      <button
-        data-view="party"
-        type="button"
-      >
-        <span>👥</span>
-        <small>Party</small>
-      </button>
-
 
       <button
         data-view="profile"
         class="profile-nav"
-        type="button"
       >
         <span>♛</span>
         <small>Profile</small>
       </button>
 
-
-      <button
-        data-view="style"
-        type="button"
-      >
+      <button data-view="style">
         <span>👗</span>
         <small>Style</small>
       </button>
 
-
-      <button
-        data-view="games"
-        type="button"
-      >
+      <button data-view="games">
         <span>🕹️</span>
         <small>Games</small>
       </button>
